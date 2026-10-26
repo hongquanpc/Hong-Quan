@@ -32,7 +32,7 @@ const build = path.join(epDir, 'build');
     await page.screenshot({ path: path.join(build, 'thumbnail.png') });
   } else if (opt('--stills')) {
     for (const t of opt('--stills').split(',').map(Number)) {
-      await page.evaluate(t => window.renderAt(t), t);
+      await page.evaluate(t => { window.renderAt(t); return Promise.all([...document.images].map(i => i.complete ? 0 : i.decode().catch(() => 0))); }, t);
       await page.screenshot({ path: path.join(build, `still_${t}.png`) });
     }
   } else if (args.includes('--qa')) {
@@ -43,7 +43,7 @@ const build = path.join(epDir, 'build');
     const dir = path.join(build, 'qa_frames');
     fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir);
     for (const [i, [s, e]] of tl.lines.entries()) {
-      await page.evaluate(t => window.renderAt(t), Math.max(s, e - 0.05));
+      await page.evaluate(t => { window.renderAt(t); return Promise.all([...document.images].map(i => i.complete ? 0 : i.decode().catch(() => 0))); }, Math.max(s, e - 0.05));
       await page.screenshot({ path: path.join(dir, `${String(i).padStart(2, '0')}.png`) });
     }
     for (const t of times) issues.push(...await page.evaluate(t => window.layoutIssues(t), t));
@@ -56,7 +56,7 @@ const build = path.join(epDir, 'build');
     const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
       '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', '-r', String(fps), out], { stdio: ['pipe', 'inherit', 'inherit'] });
     for (let f = 0; f < total; f++) {
-      await page.evaluate(t => window.renderAt(t), f / fps);
+      await page.evaluate(t => { window.renderAt(t); return Promise.all([...document.images].map(i => i.complete ? 0 : i.decode().catch(() => 0))); }, f / fps);
       const buf = await page.screenshot({ type: 'jpeg', quality: 95 });
       if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
       if (f % 300 === 0) console.log(`frame ${f}/${total}`);

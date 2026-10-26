@@ -205,6 +205,108 @@
       });
     },
 
+    // Screen recording / screenshot inside a phone or browser frame, with zooms and callouts.
+    // media frames come from prepare.js (build/media/<scene>/NNNNN.jpg at 30 fps).
+    screen(sc, root, L) {
+      header(sc, root, L);
+      const m = sc._media, phone = (sc.frame || 'phone') === 'phone';
+      const top = sc.title ? 290 : 240;
+      const box = phone ? { x: 270, y: sc.title ? 250 : 200, w: 540, h: 1130 } : { x: 60, y: top, w: 960, h: Math.min(1340 - top, Math.round(960 * (m.h / m.w)) + 64) };
+      const bar = phone ? '' : `<div style="height:64px;background:#f2f1f6;display:flex;align-items:center;gap:12px;padding:0 24px">
+          <div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div>
+          <div style="flex:1;margin-left:16px;height:38px;border-radius:19px;background:#fff;font-size:22px;color:var(--muted);display:flex;align-items:center;padding:0 20px">🔒 ${esc(sc.url || '')}</div></div>`;
+      const dev = el(`<div class="abs" data-box style="left:${box.x}px;top:${box.y}px;width:${box.w}px;height:${box.h}px;border-radius:${phone ? 64 : 26}px;
+          background:${phone ? '#111' : '#fff'};padding:${phone ? 14 : 0}px;box-shadow:0 40px 90px rgba(20,20,40,.35);overflow:hidden">${bar}
+          <div class="vp" style="position:relative;width:100%;height:${phone ? '100%' : `calc(100% - 64px)`};overflow:hidden;border-radius:${phone ? 50 : 0}px;background:#fff">
+            <img data-seq class="frame" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;transform-origin:50% 50%">
+          </div>${phone ? '<div class="abs" style="left:50%;top:26px;width:150px;height:40px;margin-left:-75px;border-radius:20px;background:#111"></div>' : ''}</div>`);
+      root.appendChild(beat(dev, 'up', L(0) - 0.1, 0.7));
+      const img = dev.querySelector('.frame');
+      const zooms = (sc.zooms || []).map(z => ({ ...z, at: L(z.line ?? 0) + (z.delay || 0) }));
+      (sc.callouts || []).forEach((c, i) => root.appendChild(beat(el(`<div class="abs" style="left:${c.x ?? 600}px;top:${c.y ?? 300 + i * 120}px;z-index:3">
+          <span class="pill" data-box style="background:${c.color || 'var(--yellow)'};font-size:34px;font-weight:900;box-shadow:0 14px 30px rgba(0,0,0,.25)">${rich(c.text)}</span></div>`), 'pop', L(c.line ?? i))));
+      const t0 = L(sc.startLine ?? 0);
+      let cur = -1;
+      return t => {
+        const n = m.frames ? Math.min(m.frames, Math.max(1, Math.floor((t - t0) * 30) + 1)) : 0;
+        if (m.frames && n !== cur) { cur = n; img.src = `${m.dir}/${String(n).padStart(5, '0')}.jpg`; }
+        if (!m.frames && cur !== 0) { cur = 0; img.src = m.src; }
+        let sc_ = 1, ox = 50, oy = 50;
+        for (const z of zooms) {
+          if (t < z.at) continue;
+          const p = Math.min(1, (t - z.at) / 0.6), e = p < 1 ? 1 - Math.pow(1 - p, 3) : 1;
+          const out = z.hold ? Math.min(1, Math.max(0, (t - z.at - z.hold) / 0.5)) : 0;
+          sc_ = 1 + ((z.scale || 1.8) - 1) * e * (1 - out); ox = (z.x ?? 0.5) * 100; oy = (z.y ?? 0.4) * 100;
+        }
+        img.style.transformOrigin = `${ox}% ${oy}%`;
+        img.style.transform = `scale(${sc_})`;
+      };
+    },
+
+    // Article / press quote: real screenshot (src) panned slowly, or a clean quote card with yellow marker sweep
+    article(sc, root, L) {
+      header(sc, root, L);
+      const top = sc.title ? 290 : 220;
+      if (sc._media) {
+        const card = el(`<div class="card abs" data-box style="left:70px;top:${top}px;width:940px;height:${sc.height || 900}px;overflow:hidden">
+          <div style="height:64px;background:#f2f1f6;display:flex;align-items:center;gap:12px;padding:0 24px"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div>
+          <div style="margin-left:16px;font-size:24px;color:var(--muted)">🔒 ${esc(sc.site || '')}</div></div>
+          <img src="${sc._media.src}" style="width:100%;display:block;transform-origin:top center"></div>`);
+        root.appendChild(beat(card, 'up', L(0)));
+        const img = card.querySelector('img'), a = L(0), b = L(sc.lines.length - 1) + 2;
+        return t => { const p = Math.min(1, Math.max(0, (t - a) / (b - a))); img.style.transform = `scale(${1 + 0.08 * p}) translateY(${-(sc.pan || 120) * p}px)`; };
+      }
+      const marks = [];
+      const quote = esc(sc.quote).replace(/\*([^*]+)\*/g, (_, x) => `<span class="mk" style="background:linear-gradient(transparent 55%,#ffe066 55%) no-repeat;background-size:0% 100%">${x}</span>`);
+      const card = el(`<div class="card abs" data-box style="left:70px;top:${top}px;width:940px;padding:44px 50px">
+        <div class="row" style="gap:18px;margin-bottom:22px">${sc.logo ? brand(sc.logo, 64) : ''}<div style="font-size:28px;font-weight:700;color:var(--muted)">${esc(sc.site || '')}</div>
+          ${sc.date ? `<div style="margin-left:auto;font-size:26px;color:var(--muted)">${esc(sc.date)}</div>` : ''}</div>
+        ${sc.headline ? `<div style="font-family:Georgia,serif;font-size:50px;font-weight:700;line-height:1.2;letter-spacing:-.5px">${esc(sc.headline)}</div>` : ''}
+        <div style="font-family:Georgia,serif;font-size:38px;line-height:1.55;margin-top:24px;color:#2a2a3a">${quote}</div></div>`);
+      root.appendChild(beat(card, 'up', L(0)));
+      card.querySelectorAll('.mk').forEach((mk, i) => marks.push({ mk, at: L((sc.markLines || [])[i] ?? i + 1) }));
+      return t => marks.forEach(({ mk, at }) => { mk.style.backgroundSize = `${Math.min(100, Math.max(0, (t - at) / 0.6 * 100))}% 100%`; });
+    },
+
+    // Social post card (quote a real post; keep name/handle/numbers exactly as on the source)
+    tweet(sc, root, L) {
+      header(sc, root, L);
+      const top = sc.title ? 300 : 260;
+      const card = el(`<div class="card abs" data-box style="left:70px;top:${top}px;width:940px;padding:44px 48px">
+        <div class="row" style="gap:22px">${sc.logo ? brand(sc.logo, 96) : `<div style="width:96px;height:96px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;font-size:44px;font-weight:900">${esc((sc.name || '?')[0])}</div>`}
+          <div><div style="font-size:36px;font-weight:800">${esc(sc.name)} ${sc.verified ? '<span style="color:#1d9bf0">✔</span>' : ''}</div><div style="font-size:28px;color:var(--muted)">${esc(sc.handle || '')}</div></div>
+          ${sc.platform ? `<div style="margin-left:auto">${brand(sc.platform, 64)}</div>` : ''}</div>
+        <div style="font-size:40px;line-height:1.4;margin-top:26px;font-weight:500">${rich(sc.text)}</div>
+        <div style="font-size:26px;color:var(--muted);margin-top:22px">${esc(sc.date || '')}</div>
+        <div class="row" style="gap:36px;margin-top:22px;padding-top:22px;border-top:2px solid #eee;font-size:30px;font-weight:700;color:var(--muted)">
+          ${sc.views ? `<span class="views" style="background:#ffe066;color:var(--ink);padding:2px 12px;border-radius:8px">👁 ${esc(sc.views)}</span>` : ''}
+          ${sc.reposts ? `<span>🔁 ${esc(sc.reposts)}</span>` : ''}${sc.likes ? `<span>♥ ${esc(sc.likes)}</span>` : ''}</div></div>`);
+      root.appendChild(beat(card, 'up', L(0)));
+      const v = card.querySelector('.views');
+      if (v) beat(v, 'pop', L(sc.viewsLine ?? 1));
+    },
+
+    // Real photos: slow Ken Burns, or before/after wipe
+    photo(sc, root, L) {
+      header(sc, root, L);
+      const imgs = sc._media, top = sc.title ? 290 : 230, h = sc.height || 820;
+      if (sc.mode === 'compare' && imgs.length >= 2) {
+        const card = el(`<div class="card abs" data-box style="left:70px;top:${top}px;width:940px;height:${h}px;overflow:hidden;padding:0">
+          <img src="${imgs[0].src}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          <div class="after" style="position:absolute;inset:0;overflow:hidden;width:0%"><img src="${imgs[1].src}" style="position:absolute;left:0;top:0;width:940px;height:${h}px;object-fit:cover"></div>
+          <div class="bar" style="position:absolute;top:0;bottom:0;width:8px;background:#fff;box-shadow:0 0 20px rgba(0,0,0,.4);left:0"></div>
+          ${(sc.labels || []).map((lb, i) => `<span class="pill" style="position:absolute;top:24px;${i ? 'right' : 'left'}:24px;font-size:28px;background:${i ? 'var(--purple)' : 'var(--dark)'};color:#fff">${esc(lb)}</span>`).join('')}</div>`);
+        root.appendChild(beat(card, 'up', L(0)));
+        const after = card.querySelector('.after'), bar = card.querySelector('.bar'), at = L(sc.wipeLine ?? 1);
+        return t => { const p = Math.min(1, Math.max(0, (t - at) / 1.4)), e = p * p * (3 - 2 * p); after.style.width = `${e * 100}%`; bar.style.left = `calc(${e * 100}% - 4px)`; };
+      }
+      const card = el(`<div class="card abs" data-box style="left:70px;top:${top}px;width:940px;height:${h}px;overflow:hidden"><img src="${imgs[0].src}" style="width:100%;height:100%;object-fit:cover"></div>`);
+      if (sc.caption) card.appendChild(el(`<span class="pill" style="position:absolute;left:24px;bottom:24px;font-size:28px">${rich(sc.caption)}</span>`));
+      root.appendChild(beat(card, 'up', L(0)));
+      const img = card.querySelector('img'), a = L(0), b = a + 8;
+      return t => { const p = Math.min(1, Math.max(0, (t - a) / (b - a))); img.style.transform = `scale(${1.04 + 0.1 * p})`; };
+    },
+
     // Outro: brand + like/save/share/follow + comment prompt + sources
     cta(sc, root, L, ep) {
       const acts = [['heart', 'Thả tim', 'var(--red)', 0], ['bookmark', 'Lưu lại', '#f5a524', 0.5], ['share', 'Chia sẻ', 'var(--green)', 1.2], ['plus', 'Theo dõi', 'var(--purple)', null]];

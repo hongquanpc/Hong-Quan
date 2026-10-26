@@ -2,3 +2,4 @@ node_modules/
 episodes/*/build/
 .tts_cache/
 .env
+episodes/_test-*/

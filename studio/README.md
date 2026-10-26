@@ -67,3 +67,24 @@ thêm file logo chính thức vào `assets/logos/<slug>.svg` để dùng logo th
 
 **Icon:** `eye bell wrench shield key file list check x chat star code terminal bolt clock rocket brain users bot lock search git
 download phone money chart sparkles warning plug layers heart bookmark share plus target test bug megaphone palette home`.
+
+## Quay màn hình (chạy trên Mac để dùng tài khoản đã đăng nhập)
+
+```bash
+./setup-mac.sh                                   # cài một lần
+node engine/record.js --login                    # đăng nhập ChatGPT/Gemini/Claude vào profile quay riêng
+node engine/record.js episodes/<id>/shots/demo.json     # quay web theo kịch bản → episodes/<id>/media/demo.mp4
+engine/record-sim.sh ios episodes/<id>/media/app.mp4 30 # quay iOS Simulator 30s (android | mac cũng được)
+```
+Kịch bản quay (`shots/<tên>.json`): `{"url", "device": "phone|desktop", "steps": [{"wait"}, {"click"}, {"type", "into"},
+{"press"}, {"waitFor"}, {"scroll"}, {"hover"}, {"highlight": "cụm chữ tô vàng"}, {"screenshot": "tên"}, {"goto"}]}` —
+có con trỏ chuột và hiệu ứng bấm, quay ở độ phân giải thật của màn hình.
+
+| type | Dùng cho | Trường chính |
+|---|---|---|
+| `screen` | Clip/ảnh quay màn hình trong khung điện thoại hoặc trình duyệt | `src`, `frame: phone\|browser`, `url`, `from`, `to`, `speed`, `zooms[{line,x,y,scale,hold}]`, `callouts[{line,text,x,y}]` |
+| `article` | Trích bài báo: ảnh chụp (`src`) hoặc thẻ trích dẫn tô vàng theo lời đọc | `site`, `logo`, `date`, `headline`, `quote` (`*cụm tô vàng*`) |
+| `tweet` | Bài đăng mạng xã hội (ghi đúng như nguồn) | `name`, `handle`, `platform`, `text`, `date`, `views`, `likes`, `reposts` |
+| `photo` | Ảnh thật: zoom chậm hoặc so sánh trước/sau | `images[]`, `mode: compare`, `labels[]`, `caption` |
+
+Dùng được trong VS Code: cài extension Claude Code, mở thư mục `Hong-Quan`, chat ngay trong VS Code — cùng quy trình.

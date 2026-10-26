@@ -1,6 +1,7 @@
 // Validate episode.json, resolve brand logos + host poses, merge the voice timeline -> build/data.js
 // Usage: node engine/prepare.js episodes/<id>
 const fs = require('fs');
+const { execFileSync } = require('child_process');
 const path = require('path');
 
 const STUDIO = path.resolve(__dirname, '..');
@@ -11,7 +12,7 @@ fs.mkdirSync(build, { recursive: true });
 
 // ---- validation: fail early with a readable message
 const errors = [];
-const TYPES = ['cover', 'headline', 'list', 'compare', 'stat', 'repo', 'code', 'chat', 'flow', 'cta'];
+const TYPES = ['cover', 'headline', 'list', 'compare', 'stat', 'repo', 'code', 'chat', 'flow', 'cta', 'screen', 'article', 'tweet', 'photo'];
 if (!ep.scenes?.length) errors.push('episode has no scenes');
 if (ep.scenes?.[0]?.type !== 'cover') errors.push('scene 0 must be type "cover" (it is the thumbnail + hook)');
 if (ep.scenes?.at(-1)?.type !== 'cta') errors.push('last scene must be type "cta"');
@@ -76,6 +77,36 @@ else {
 }
 const nLines = ep.scenes.reduce((n, s) => n + s.lines.length, 0);
 if (tl.lines.length !== nLines) { console.error(`timeline has ${tl.lines.length} lines but episode has ${nLines} — re-run tts.py`); process.exit(1); }
+
+// ---- media: screen recordings -> 30 fps JPEG frames; images -> paths relative to the player
+const ENGINE = path.join(STUDIO, 'engine');
+const probe = f => { const [w, h] = execFileSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', f]).toString().trim().split(',').map(Number); return { w, h }; };
+const mediaErr = [];
+ep.scenes.forEach((sc, i) => {
+  const srcs = sc.type === 'photo' ? (sc.images || [sc.src]) : (sc.src ? [sc.src] : []);
+  if (['screen', 'photo'].includes(sc.type) && !srcs.length) mediaErr.push(`scene ${i} (${sc.type}): needs "src"`);
+  const files = srcs.map(s => path.resolve(epDir, s));
+  files.forEach(f => { if (!fs.existsSync(f)) mediaErr.push(`scene ${i}: file not found ${f}`); });
+  if (mediaErr.length || !files.length) return;
+  const isVideo = f => /\.(mp4|mov|webm|m4v)$/i.test(f);
+  if (sc.type === 'screen' && isVideo(files[0])) {
+    const dir = path.join(build, 'media', `s${i}`);
+    const stamp = JSON.stringify([files[0], fs.statSync(files[0]).mtimeMs, sc.from, sc.to, sc.speed]);
+    if (!fs.existsSync(path.join(dir, '.stamp')) || fs.readFileSync(path.join(dir, '.stamp'), 'utf8') !== stamp) {
+      fs.rmSync(dir, { recursive: true, force: true }); fs.mkdirSync(dir, { recursive: true });
+      const a = [...(sc.from ? ['-ss', String(sc.from)] : []), ...(sc.to ? ['-to', String(sc.to)] : []), '-i', files[0],
+        '-vf', `setpts=PTS/${sc.speed || 1},fps=30,scale='min(1080,iw)':-2`, '-q:v', '3', path.join(dir, '%05d.jpg')];
+      execFileSync('ffmpeg', ['-v', 'error', '-y', ...a]);
+      fs.writeFileSync(path.join(dir, '.stamp'), stamp);
+    }
+    const frames = fs.readdirSync(dir).filter(f => f.endsWith('.jpg')).length;
+    sc._media = { dir: path.relative(ENGINE, dir), frames, ...probe(path.join(dir, '00001.jpg')) };
+  } else {
+    const m = files.map(f => ({ src: path.relative(ENGINE, f), ...probe(f) }));
+    sc._media = sc.type === 'photo' ? m : m[0];
+  }
+});
+if (mediaErr.length) { console.error('media errors:\n - ' + mediaErr.join('\n - ')); process.exit(1); }
 
 const data = { ...ep, logos, host: { poses } };
 fs.writeFileSync(path.join(build, 'data.js'), `window.EP = ${JSON.stringify(data)};\nwindow.TL = ${JSON.stringify(tl)};\n`);
