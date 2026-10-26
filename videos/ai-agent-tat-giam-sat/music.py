@@ -1,19 +1,21 @@
-"""Synthesize a soft background bed + transition SFX matched to the video timeline.
+"""Synthesize an energetic background track + SFX matched to the video timeline.
+Hook (cover): tension riser + heartbeat hits -> impact + drop into a pumping beat.
 Usage: python3 music.py out.wav"""
 import json, os, re, sys, wave
 import numpy as np
 
 SR = 44100
-STORY = 66.5          # story timeline length in index.html
-COVER = 1.0           # thumbnail cover held at the start (matches index.html)
+STORY = 72.0          # story timeline length in index.html
 HERE = os.path.dirname(os.path.abspath(__file__))
+rng = np.random.default_rng(7)
 
 # Story time -> output time, using the same voice warp as index.html.
 caps = [tuple(map(float, m)) for m in re.findall(r"\[\s*([\d.]+),\s*([\d.]+),\s*\"", open(os.path.join(HERE, "index.html")).read())]
-knots = [(0.0, 0.0)]
+knots, COVER = [(0.0, 0.0)], 1.0
 tl = os.path.join(HERE, "timeline.js")
 if os.path.exists(tl):
     v = json.loads(open(tl).read().split("=", 1)[1].rstrip().rstrip(";"))
+    COVER = v.get("cover", 1.0)
     for (s0, e0), (s1, e1) in zip(caps, v["lines"]):
         knots += [(s0, s1), (e0, e1)]
     knots.append((STORY, v["total"]))
@@ -25,81 +27,93 @@ def at(story_t):
     return COVER + float(np.interp(story_t, ks, kv))
 
 DUR = at(STORY)
-BPM = 96
-SCENES = [at(x) for x in [0, 6, 12, 22, 34, 41, 47, 61]]   # whoosh at each scene start
-POPS_STORY = [0.35, 2.6, 7.4, 13.5, 16.2, 19.4, 24.8, 26.6, 28.6, 29.3, 31.7, 35.6, 38.3, 44.1, 46, 50, 53.5, 57, 62.6]
-POPS = [at(x) for x in POPS_STORY]
+BPM = 112
+SCENES = [at(x) for x in [6, 12, 22, 34, 41, 47, 61]]   # whoosh at each scene change
+POPS = [at(x) for x in [0.35, 2.6, 7.4, 13.5, 16.2, 19.4, 24.8, 26.6, 28.6, 29.3, 31.7, 35.6, 38.3, 44.1, 46, 50, 53.5, 57, 61.3, 61.8, 63, 64.6, 67.6]]
 
 n = int(SR * DUR)
 t = np.arange(n) / SR
-mix = np.zeros(n)
+music, sfx = np.zeros(n), np.zeros(n)
 
-def note(f):  # midi -> Hz
-    return 440 * 2 ** ((f - 69) / 12)
+def note(m):
+    return 440 * 2 ** ((m - 69) / 12)
 
-def add(sig, start):
+def add(buf, sig, start):
     i = int(start * SR)
     j = min(n, i + len(sig))
-    if i < n:
-        mix[i:j] += sig[: j - i]
+    if 0 <= i < n:
+        buf[i:j] += sig[: j - i]
 
-def env(length, a=0.01, r=0.3):
+def env(length, a=0.005, r=0.2):
     k = np.arange(int(length * SR)) / SR
-    e = np.minimum(1, k / a) * np.exp(-k / r)
-    return k, e
+    return k, np.minimum(1, k / a) * np.exp(-k / r)
+
+def saw(f, k, harmonics=8):
+    return sum(np.sin(2 * np.pi * f * h * k) / h for h in range(1, harmonics + 1)) * 0.6
+
+def kick(k, f0=130, f1=48, drop=30):
+    return np.sin(2 * np.pi * np.cumsum(f0 * np.exp(-k * drop) + f1) / SR)
 
 beat = 60 / BPM
 bar = 4 * beat
-# Am - F - C - G, two bars each
-chords = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]]
-for b in range(int(DUR / bar) + 1):
+start = COVER                                  # the drop
+chords = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]]   # Am F C G
+
+# ---- hook: riser + heartbeat during the cover ----
+k = np.arange(int(COVER * SR)) / SR
+sweep = np.cumsum(200 + 1800 * (k / COVER) ** 2) / SR
+add(music, 0.35 * (rng.standard_normal(len(k)) * 0.5 + np.sin(2 * np.pi * sweep)) * (k / COVER) ** 2, 0)
+for hb in np.arange(0.05, COVER - 0.3, 0.55):
+    for off, amp in ((0, 0.9), (0.16, 0.6)):
+        kk, e = env(0.3, 0.002, 0.09)
+        add(music, amp * kick(kk, 70, 42, 20) * e, hb + off)
+
+# ---- impact at the drop ----
+kk, e = env(1.6, 0.001, 0.45)
+add(sfx, kick(kk, 90, 32, 7) * e, start)
+crash = rng.standard_normal(int(1.8 * SR)) * np.exp(-np.arange(int(1.8 * SR)) / SR / 0.5)
+add(sfx, 0.25 * np.diff(crash, prepend=0), start)
+
+# ---- main groove ----
+for b in range(int((DUR - start) / bar) + 1):
+    t0 = start + b * bar
     ch = chords[(b // 2) % 4]
-    L = bar * 1.05
-    k = np.arange(int(L * SR)) / SR
-    e = np.minimum(1, k / 0.6) * np.minimum(1, (L - k) / 0.5)
-    pad = sum(np.sin(2 * np.pi * note(m) * k) + 0.3 * np.sin(2 * np.pi * note(m) * 2.003 * k) for m in ch)
-    add(0.045 * pad * e, b * bar)
-    # bass
-    kb, eb = env(beat * 1.8, 0.01, 0.5)
-    add(0.12 * np.sin(2 * np.pi * note(ch[0] - 12) * kb) * eb, b * bar)
-    add(0.10 * np.sin(2 * np.pi * note(ch[0] - 12) * kb) * eb, b * bar + 2 * beat)
-    # pluck arpeggio on 8ths
-    for s in range(8):
-        m = ch[[0, 1, 2, 1, 0, 2, 1, 2][s]] + 12
-        kp, ep = env(0.35, 0.003, 0.12)
-        add(0.035 * np.sin(2 * np.pi * note(m) * kp) * ep, b * bar + s * beat / 2)
+    for q in range(4):
+        tb = t0 + q * beat
+        kk, e = env(0.32, 0.001, 0.09)
+        add(music, 0.95 * kick(kk) * e, tb)                      # four-on-the-floor kick
+        if q in (1, 3):                                          # clap on 2 and 4
+            kc, ec = env(0.22, 0.001, 0.06)
+            clap = np.diff(rng.standard_normal(len(kc) + 1)) * ec
+            add(music, 0.32 * clap, tb); add(music, 0.18 * clap, tb + 0.012)
+        kh, eh = env(0.12, 0.001, 0.035)                         # open hat offbeat
+        add(music, 0.10 * np.diff(rng.standard_normal(len(kh) + 1)) * eh, tb + beat / 2)
+        for sxt in (1, 3):                                       # closed hats
+            kh, eh = env(0.04, 0.001, 0.01)
+            add(music, 0.05 * np.diff(rng.standard_normal(len(kh) + 1)) * eh, tb + sxt * beat / 4)
+        kb = np.arange(int(beat * SR)) / SR                      # sidechain-pumped bass + pad
+        pump = np.minimum(1, (kb / (beat * 0.55)) ** 1.5)
+        add(music, 0.28 * saw(note(ch[0] - 24), kb, 5) * pump * np.exp(-kb * 1.2), tb)
+        add(music, 0.05 * sum(saw(note(m), kb, 4) for m in ch) * pump, tb)
+    for s8, idx in enumerate([0, 2, 1, 2, 0, 1, 2, 1]):           # pluck riff on 8ths
+        kp, ep = env(0.25, 0.002, 0.08)
+        add(music, 0.07 * saw(note(ch[idx] + 12), kp, 6) * ep, t0 + s8 * beat / 2)
 
-# soft kick + hat
-rng = np.random.default_rng(1)
-for i in range(int(DUR / beat)):
-    kk, ek = env(0.25, 0.002, 0.07)
-    f = 110 * np.exp(-kk * 25) + 45
-    add(0.22 * np.sin(2 * np.pi * np.cumsum(f) / SR) * ek, i * beat)
-    kh, eh = env(0.05, 0.001, 0.015)
-    hat = np.diff(rng.standard_normal(len(kh) + 1))
-    add(0.025 * hat * eh, i * beat + beat / 2)
-
-# SFX
+# ---- SFX ----
 for s in SCENES:
-    k = np.arange(int(0.6 * SR)) / SR
-    noise = rng.standard_normal(len(k))
-    noise = np.convolve(noise, np.ones(12) / 12, 'same')
-    e = np.sin(np.pi * k / 0.6) ** 2
-    add(0.25 * noise * e, max(0, s - 0.3))
+    L = 0.55
+    k = np.arange(int(L * SR)) / SR
+    noise = np.convolve(rng.standard_normal(len(k)), np.ones(10) / 10, "same")
+    add(sfx, 0.45 * noise * np.sin(np.pi * k / L) ** 2, max(0, s - 0.35))
 for p in POPS:
     k, e = env(0.12, 0.001, 0.03)
-    f = 900 * np.exp(-k * 18) + 500
-    add(0.18 * np.sin(2 * np.pi * np.cumsum(f) / SR) * e, p)
+    add(sfx, 0.3 * np.sin(2 * np.pi * np.cumsum(1000 * np.exp(-k * 18) + 520) / SR) * e, p)
 
-# impact hit when the cover cuts to the story
-k, e = env(0.9, 0.002, 0.25)
-add(0.5 * np.sin(2 * np.pi * np.cumsum(60 * np.exp(-k * 6) + 38) / SR) * e, COVER)
-
-# fade in/out, normalize
-mix *= np.minimum(1, t / 0.05) * np.minimum(1, (DUR - t) / 2.0)
-mix = np.tanh(mix * 1.2)
-mix = mix / np.max(np.abs(mix)) * 0.8
+# ---- master ----
+mix = (np.tanh(music * 0.9) * 0.75 + sfx) * np.minimum(1, (DUR - t) / 2.5)
+mix = np.tanh(mix * 1.1)
+mix = mix / np.max(np.abs(mix)) * 0.9
 pcm = (mix * 32767).astype(np.int16)
-stereo = np.stack([pcm, pcm], axis=1)
-with wave.open(sys.argv[1] if len(sys.argv) > 1 else 'music.wav', 'wb') as w:
-    w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes(stereo.tobytes())
+with wave.open(sys.argv[1] if len(sys.argv) > 1 else "music.wav", "wb") as w:
+    w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
+    w.writeframes(np.stack([pcm, pcm], axis=1).tobytes())

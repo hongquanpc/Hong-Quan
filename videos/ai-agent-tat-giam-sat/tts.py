@@ -7,11 +7,13 @@
 
 Lines are 1:1 with CAPTIONS in index.html (spoken text may differ from the on-screen text).
 """
-import argparse, hashlib, json, os, subprocess, sys, urllib.request, wave
+import argparse, hashlib, json, os, subprocess, sys, urllib.error, urllib.request, wave
 
+# Spoken over the thumbnail cover: the hook. Its length sets the cover duration.
+HOOK = "Dừng lướt! AI của OpenAI vừa tự tắt hệ thống giám sát, rồi còn nói dối con người!"
 LINES = [
-    "AI agent của OpenAI vừa tự tắt hệ thống giám sát,",
-    "và một agent còn nói dối về chuyện đó!",
+    "Đây là chuyện có thật, chính OpenAI vừa tự công bố.",
+    "Và nó đáng lo hơn bạn nghĩ.",
     "OpenAI vừa công bố hai sự cố nội bộ,",
     "xảy ra khi agent đang làm việc code hết sức bình thường.",
     "Sự cố một: agent GPT sáu chấm một Sol được giao sửa pipeline đánh giá.",
@@ -29,10 +31,13 @@ LINES = [
     "Một: luôn đọc diff trước khi merge.",
     "Hai: chỉ cấp quyền tối thiểu.",
     "Ba: kiểm chứng bằng log, đừng chỉ tin lời agent.",
-    "Theo dõi AI Today chấm V N để cập nhật AI mỗi ngày nhé!",
+    "Thấy hữu ích thì lưu video lại, và chia sẻ ngay cho team dev của bạn.",
+    "Theo dõi AI Today chấm V N để cập nhật AI mỗi ngày.",
+    "Còn bạn, có dám để AI tự merge code không? Comment cho mình biết nhé!",
 ]
 SCENE_STARTS = {2, 4, 7, 11, 13, 15, 19}   # line indexes that open a new scene
-GAP, SCENE_GAP, LEAD, TAIL = 0.25, 0.7, 0.25, 1.8
+GAP, SCENE_GAP, LEAD, TAIL = 0.25, 0.7, 0.2, 1.5
+HOOK_PRE, HOOK_POST = 0.1, 0.35
 SR = 44100
 API = "https://api.elevenlabs.io/v1"
 
@@ -47,18 +52,24 @@ def api(path, body=None):
         return r.read()
 
 
-def synth(i, voice, model, cache):
-    text = LINES[i]
-    tag = hashlib.sha1(f"{voice}|{model}|{text}".encode()).hexdigest()[:12]
-    mp3 = os.path.join(cache, f"{i:02d}_{tag}.mp3")
+def synth(text, prev, nxt, voice, model, cache, energy=0.4):
+    tag = hashlib.sha1(f"{voice}|{model}|{energy}|{text}".encode()).hexdigest()[:12]
+    mp3 = os.path.join(cache, f"{tag}.mp3")
     if not os.path.exists(mp3):
-        audio = api(f"/text-to-speech/{voice}?output_format=mp3_44100_128", {
+        body = {
             "text": text, "model_id": model,
-            "previous_text": LINES[i - 1] if i else None,
-            "next_text": LINES[i + 1] if i + 1 < len(LINES) else None,
+            "language_code": "vi",   # force Vietnamese; the model must list vi (multilingual_v2 does not)
+            "previous_text": prev, "next_text": nxt,
             # lively social-media read: lower stability, some style exaggeration
-            "voice_settings": {"stability": 0.38, "similarity_boost": 0.8, "style": 0.4, "use_speaker_boost": True, "speed": 1.08},
-        })
+            "voice_settings": {"stability": 0.38, "similarity_boost": 0.8, "style": energy, "use_speaker_boost": True, "speed": 1.05},
+        }
+        try:
+            audio = api(f"/text-to-speech/{voice}?output_format=mp3_44100_128", body)
+        except urllib.error.HTTPError as e:
+            if e.code not in (400, 422):
+                raise
+            body.pop("previous_text"); body.pop("next_text")   # not every model takes request stitching
+            audio = api(f"/text-to-speech/{voice}?output_format=mp3_44100_128", body)
         open(mp3, "wb").write(audio)
     # decode to mono PCM, trimming leading/trailing silence
     pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", mp3, "-af",
@@ -70,7 +81,7 @@ def synth(i, voice, model, cache):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice")
-    ap.add_argument("--model", default="eleven_multilingual_v2")
+    ap.add_argument("--model", default="eleven_v4")
     ap.add_argument("--list-voices", action="store_true")
     ap.add_argument("--fake", action="store_true")
     a = ap.parse_args()
@@ -85,13 +96,20 @@ def main():
 
     cache = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".tts_cache")
     os.makedirs(cache, exist_ok=True)
-    out, lines, t = bytearray(), [], LEAD
-    out += bytes(int(LEAD * SR) * 2)
+    silence = lambda sec: bytes(int(sec * SR) * 2)
+    fake = lambda text: silence(len(text.split()) * 0.3)
+    hook = fake(HOOK) if a.fake else synth(HOOK, None, LINES[0], a.voice, a.model, cache, energy=0.6)
+    cover = HOOK_PRE + len(hook) / 2 / SR + HOOK_POST
+    out = bytearray(silence(HOOK_PRE) + hook + silence(HOOK_POST))
+    print(f"hook {len(hook) / 2 / SR:5.2f}s  {HOOK}")
+    # story lines: times are relative to the end of the cover
+    lines, t = [], LEAD
+    out += silence(LEAD)
     for i in range(len(LINES)):
         if i:
             gap = SCENE_GAP if i in SCENE_STARTS else GAP
             out += bytes(int(gap * SR) * 2); t += gap
-        pcm = bytes(int(len(LINES[i].split()) * 0.3 * SR) * 2) if a.fake else synth(i, a.voice, a.model, cache)
+        pcm = fake(LINES[i]) if a.fake else synth(LINES[i], LINES[i - 1] if i else HOOK, LINES[i + 1] if i + 1 < len(LINES) else None, a.voice, a.model, cache)
         d = len(pcm) / 2 / SR
         lines.append([round(t, 3), round(t + d, 3)])
         out += pcm; t += d
@@ -106,8 +124,8 @@ def main():
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", "voice.wav", "-af", "loudnorm=I=-15:TP=-1.5:LRA=9", "-ar", str(SR), "voice_norm.wav"], check=True)
     os.replace("voice_norm.wav", "voice.wav")
     with open("timeline.js", "w") as f:
-        f.write("window.VOICE_TIMELINE = " + json.dumps({"lines": lines, "total": round(t, 3)}) + ";\n")
-    print(f"voice.wav + timeline.js written, total {t:.1f}s")
+        f.write("window.VOICE_TIMELINE = " + json.dumps({"cover": round(cover, 3), "lines": lines, "total": round(t, 3)}) + ";\n")
+    print(f"voice.wav + timeline.js written, cover {cover:.1f}s + story {t:.1f}s")
 
 
 if __name__ == "__main__":
