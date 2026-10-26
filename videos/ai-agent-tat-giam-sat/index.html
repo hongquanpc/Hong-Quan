@@ -434,15 +434,13 @@ const POSES = window.HOST_POSES || {};      // e.g. {shock:'assets/host/shock.pn
 // Track in story time: when the host is on screen, where, which pose and which action.
 // act: talk = speaking squash, hop = jumps, wave = side sway, shake = startled shake at `hit`
 const HOST = [
-  {from:0.5,  to:6,    x:690, y:1000, h:390, pose:'shock',   act:'talk', hit:1.9},
-  {from:6.3,  to:12,   x:40,  y:1080, h:300, pose:'explain', act:'talk'},
-  {from:19,   to:22,   x:760, y:1060, h:300, pose:'point',   act:'talk'},
-  {from:31.5, to:34,   x:740, y:780,  h:330, pose:'shock',   act:'shake', hit:31.6},
-  {from:41.3, to:47,   x:60,  y:1110, h:250, pose:'happy',   act:'hop'},
-  {from:47.3, to:61,   x:790, y:1150, h:240, pose:'point',   act:'talk'},
-  {from:61.1, to:66.5, x:330, y:250,  h:440, pose:'wave',    act:'wave'},
+  {from:0.5,  to:6,    x:640, y:960,  h:440, pose:'present', act:'talk', hit:1.9, flip:true},
+  {from:6.3,  to:12,   x:-10, y:1040, h:360, pose:'welcome', act:'talk'},
+  {from:41.3, to:47,   x:20,  y:1080, h:290, pose:'thumbs',  act:'hop'},
+  {from:47.3, to:61,   x:800, y:1120, h:280, pose:'point',   act:'talk'},
+  {from:61.1, to:66.5, x:270, y:220,  h:520, pose:'wave',    act:'wave'},
 ];
-const COVER_HOST = {x:560, y:1050, h:620, pose:'shock'};
+const COVER_HOST = {x:500, y:1000, h:700, pose:'point'};
 
 // ---- voice-over timing -------------------------------------------------------
 // timeline.js (written by tts.py) gives the real start/end of every caption line in
@@ -491,7 +489,7 @@ function renderHost(t){
   if (k.act === 'hop'){ const ph = (lt * 1.6) % 1; dy -= 70 * Math.sin(ph * Math.PI); const land = ph < 0.12 ? (0.12 - ph) / 0.12 : 0; sy -= 0.08 * land; sx += 0.06 * land; }
   if (k.act === 'wave'){ rot = 8 * Math.sin(lt * 2 * Math.PI * 1.1); dy -= 18 * Math.abs(Math.sin(lt * 2 * Math.PI * 1.1)); }
   if (k.hit !== undefined && t >= k.hit && t < k.hit + 0.7){ const p = (t - k.hit) / 0.7; dx = 26 * Math.sin(p * Math.PI * 8) * (1 - p); dy -= 50 * Math.sin(Math.min(1, p * 2) * Math.PI); }
-  placeHost(k.x, k.y, k.h, `translate(${dx}px,${dy}px) rotate(${rot}deg) scale(${sc * sx},${sc * sy})`);
+  placeHost(k.x, k.y, k.h, `translate(${dx}px,${dy}px) rotate(${rot}deg) scale(${sc * sx * (k.flip ? -1 : 1)},${sc * sy})`);
 }
 
 document.querySelectorAll('.robot-slot').forEach(s => s.appendChild(document.getElementById('robot').content.cloneNode(true)));
