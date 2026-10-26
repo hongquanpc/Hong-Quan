@@ -15,11 +15,11 @@ GAP, SCENE_GAP, LEAD, TAIL = 0.22, 0.6, 0.12, 1.6
 
 
 def api(path, body=None):
-    key = os.environ.get("ELEVENLABS_API_KEY")
-    if not key:
-        sys.exit("Set ELEVENLABS_API_KEY first.")
-    req = urllib.request.Request(API + path, data=json.dumps(body).encode() if body else None,
-                                 headers={"xi-api-key": key, "Content-Type": "application/json"})
+    # Key from ELEVENLABS_API_KEY, or none: in the cloud environment a network secret injects xi-api-key.
+    headers = {"Content-Type": "application/json"}
+    if os.environ.get("ELEVENLABS_API_KEY"):
+        headers["xi-api-key"] = os.environ["ELEVENLABS_API_KEY"]
+    req = urllib.request.Request(API + path, data=json.dumps(body).encode() if body else None, headers=headers)
     with urllib.request.urlopen(req, timeout=180) as r:
         return r.read()
 

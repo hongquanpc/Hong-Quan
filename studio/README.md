@@ -37,7 +37,7 @@ studio/
 
 ```bash
 cd studio && npm install                    # simple-icons (logo thương hiệu)
-export ELEVENLABS_API_KEY=...               # đặt trong biến môi trường, KHÔNG commit
+# Key ElevenLabs: cloud → Network secret (api.elevenlabs.io, header xi-api-key); máy Mac → export ELEVENLABS_API_KEY=...
 ./build.sh episodes/2026-10-26-3-repo-ai-agent
 ```
 Cần mạng tới `api.elevenlabs.io`. Playwright + Chromium + ffmpeg đã có sẵn trong môi trường cloud.

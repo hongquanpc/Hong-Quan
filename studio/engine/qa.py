@@ -101,10 +101,9 @@ if tl.get("fake"):
 elif SKIP_STT:
     warns.append("bỏ qua kiểm tra giọng đọc (--skip-stt)")
 else:
-    key = os.environ.get("ELEVENLABS_API_KEY")
-    if not key:
-        fails.append("không có ELEVENLABS_API_KEY để kiểm tra giọng đọc")
-    else:
+    key = os.environ.get("ELEVENLABS_API_KEY")   # empty is fine when a network secret injects xi-api-key
+    auth = {"xi-api-key": key} if key else {}
+    if True:
         mp3 = os.path.join(build, "voice_qa.mp3")
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(build, "voice.wav"), "-ac", "1", "-ar", "16000", "-b:a", "48k", mp3], check=True)
         bnd = uuid.uuid4().hex
@@ -113,7 +112,7 @@ else:
                 f"--{bnd}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"v.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\n").encode() \
                + open(mp3, "rb").read() + f"\r\n--{bnd}--\r\n".encode()
         req = urllib.request.Request("https://api.elevenlabs.io/v1/speech-to-text", data=body,
-                                     headers={"xi-api-key": key, "Content-Type": f"multipart/form-data; boundary={bnd}"})
+                                     headers={**auth, "Content-Type": f"multipart/form-data; boundary={bnd}"})
         stt = json.loads(urllib.request.urlopen(req, timeout=300).read())
         json.dump(stt, open(os.path.join(build, "stt.json"), "w"), ensure_ascii=False)
         # language: transcribe once more without forcing, on the first 15 s, to see what it really hears
@@ -135,7 +134,7 @@ else:
                  f"--{bnd}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"c.mp3\"\r\nContent-Type: audio/mpeg\r\n\r\n").encode() \
                 + open(clip, "rb").read() + f"\r\n--{bnd}--\r\n".encode()
         req2 = urllib.request.Request("https://api.elevenlabs.io/v1/speech-to-text", data=body2,
-                                      headers={"xi-api-key": key, "Content-Type": f"multipart/form-data; boundary={bnd}"})
+                                      headers={**auth, "Content-Type": f"multipart/form-data; boundary={bnd}"})
         lang = json.loads(urllib.request.urlopen(req2, timeout=120).read())
         if lang.get("language_code") != "vie" or lang.get("language_probability", 0) < 0.9:
             fails.append(f"giọng đọc không được nhận là tiếng Việt: {lang.get('language_code')} ({lang.get('language_probability', 0):.0%})")
