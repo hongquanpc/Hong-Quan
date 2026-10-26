@@ -1,0 +1,6 @@
+{
+  "name": "aitoday-studio",
+  "private": true,
+  "description": "Daily vertical AI video pipeline for aitoday.vn",
+  "dependencies": { "simple-icons": "16.36.0" }
+}

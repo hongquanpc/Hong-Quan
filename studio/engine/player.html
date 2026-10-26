@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>aitoday.vn studio player</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="stage">
+  <svg id="paper" width="1080" height="1920">
+    <filter id="crumple" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0022 0.003" numOctaves="4" seed="11"/>
+      <feDiffuseLighting lighting-color="#f4f3f0" surfaceScale="9"><feDistantLight azimuth="235" elevation="50"/></feDiffuseLighting>
+    </filter>
+    <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .05 0"/></filter>
+    <rect width="1080" height="1920" filter="url(#crumple)"/>
+    <rect width="1080" height="1920" filter="url(#grain)"/>
+  </svg>
+  <div id="progress"></div>
+  <div class="watermark"><div class="logo-mark">AI</div><span id="brandName">aitoday.vn</span></div>
+  <div id="scenes"></div>
+  <div id="host"><img alt=""></div>
+  <div id="cap"></div>
+</div>
+<script src="icons.js"></script>
+<script src="scenes.js"></script>
+<script>
+// Loads ?data=<path to build/data.js>, which sets window.EP (episode + resolved logos) and window.TL (voice timeline).
+const params = new URLSearchParams(location.search);
+const s = document.createElement('script');
+s.src = params.get('data');
+s.onload = () => Studio.init(window.EP, window.TL);
+document.head.appendChild(s);
+</script>
+</body>
+</html>

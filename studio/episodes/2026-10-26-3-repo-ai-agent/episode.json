@@ -1,0 +1,289 @@
+{
+  "id": "2026-10-26-3-repo-ai-agent",
+  "date": "2026-10-26",
+  "title": "3 repo AI agent miễn phí đang hot nhất GitHub",
+  "format": "repo-top3",
+  "brand": {
+    "name": "aitoday.vn",
+    "tagline": "Tin AI mỗi ngày · Dễ hiểu · Có giá trị"
+  },
+  "voice": {
+    "id": "DjY392W4TymVhSsT96jM",
+    "model": "eleven_v4",
+    "speed": 1.08
+  },
+  "post": {
+    "caption": "3 repo AI agent miễn phí đang được hàng trăm nghìn dev gắn sao: OpenClaw, Superpowers, Agency Agents. Bạn đã thử cái nào? 👇",
+    "hashtags": [
+      "#AI",
+      "#AIAgent",
+      "#GitHub",
+      "#ClaudeCode",
+      "#OpenSource",
+      "#aitoday"
+    ]
+  },
+  "sources": [
+    {
+      "name": "DEV Community",
+      "title": "Trending Open Source AI Projects on GitHub, October 2026",
+      "url": "https://dev.to/rosgluk/trending-open-source-ai-projects-on-github-october-2026-4d42",
+      "date": "2026-10-26"
+    },
+    {
+      "name": "Trendshift",
+      "title": "openclaw/openclaw",
+      "url": "https://trendshift.io/repositories/19374",
+      "date": "2026-10-26"
+    },
+    {
+      "name": "Hora de Codar",
+      "title": "Superpowers no GitHub",
+      "url": "https://horadecodar.com.br/superpowers-github/",
+      "date": "2026-10-26"
+    },
+    {
+      "name": "DEV Community",
+      "title": "What is the Agency Agents",
+      "url": "https://dev.to/preecha/what-is-the-agency-agents-3lio",
+      "date": "2026-10-26"
+    }
+  ],
+  "facts": [
+    {
+      "claim": "openclaw/openclaw có hơn 380K sao, giấy phép MIT",
+      "check": "https://github.com/openclaw/openclaw",
+      "checked": false
+    },
+    {
+      "claim": "OpenClaw nhắn qua Telegram, WhatsApp, Discord; chạy trên máy người dùng",
+      "check": "README openclaw/openclaw",
+      "checked": false
+    },
+    {
+      "claim": "Có cảnh báo bảo mật về extension của OpenClaw",
+      "check": "nathanowen.substack.com / tin bảo mật",
+      "checked": false
+    },
+    {
+      "claim": "obra/superpowers có hơn 270K sao, giấy phép MIT, dành cho Claude Code",
+      "check": "https://github.com/obra/superpowers",
+      "checked": false
+    },
+    {
+      "claim": "msitarzewski/agency-agents có hơn 150K sao, hơn 140 agent",
+      "check": "https://github.com/msitarzewski/agency-agents",
+      "checked": false
+    }
+  ],
+  "scenes": [
+    {
+      "type": "cover",
+      "tag": "🔥 GITHUB TRENDING",
+      "headline": [
+        "3 repo AI",
+        "*miễn phí*",
+        "dev phải biết"
+      ],
+      "logos": [
+        "github",
+        "claude"
+      ],
+      "note": "Lưu lại kẻo trôi 👉",
+      "sticker": "✋ DỪNG LẠI!",
+      "host": {
+        "pose": "point"
+      },
+      "lines": [
+        {
+          "say": "Dừng lại! Ba repo AI miễn phí này đang được hàng trăm nghìn lập trình viên gắn sao, và có thể làm việc của cả một team."
+        }
+      ]
+    },
+    {
+      "type": "repo",
+      "title": "Trợ lý AI chạy trên máy bạn",
+      "rank": 1,
+      "repo": "openclaw/openclaw",
+      "stars": "380K+",
+      "license": "MIT",
+      "desc": "Trợ lý AI cá nhân mã nguồn mở, điều khiển bằng *tin nhắn*.",
+      "points": [
+        {
+          "logo": "telegram",
+          "text": "Nhắn qua Telegram, WhatsApp, Discord"
+        },
+        {
+          "icon": "lock",
+          "color": "var(--green)",
+          "text": "Chạy trên máy, dữ liệu *của bạn*"
+        },
+        {
+          "icon": "warning",
+          "color": "var(--red)",
+          "text": "Kiểm tra kỹ *extension* trước khi cài"
+        }
+      ],
+      "lines": [
+        {
+          "say": "Số một: OpenClaw, trợ lý AI cá nhân, hơn ba trăm tám mươi nghìn sao.",
+          "cap": "Số 1: *OpenClaw,* trợ lý AI cá nhân, 380K+ sao"
+        },
+        {
+          "say": "Bạn nhắn tin qua Telegram hay WhatsApp, nó làm việc cho bạn.",
+          "cap": "Nhắn qua *Telegram,* WhatsApp là nó làm việc"
+        },
+        {
+          "say": "Nó chạy trên máy của bạn, dữ liệu nằm trong tay bạn.",
+          "cap": "Chạy trên máy, dữ liệu *của bạn*"
+        },
+        {
+          "say": "Nhưng hãy kiểm tra kỹ extension trước khi cài.",
+          "cap": "Nhưng kiểm tra kỹ *extension* trước khi cài!"
+        }
+      ]
+    },
+    {
+      "type": "repo",
+      "title": "Biến AI thành kỹ sư kỷ luật",
+      "rank": 2,
+      "repo": "obra/superpowers",
+      "stars": "270K+",
+      "license": "MIT",
+      "desc": "Bộ *skills* cho Claude Code: lên kế hoạch, viết test, rồi mới code.",
+      "points": [
+        {
+          "icon": "brain",
+          "text": "Bàn ý tưởng → lên *kế hoạch*"
+        },
+        {
+          "icon": "test",
+          "text": "Viết *test* trước, code sau"
+        }
+      ],
+      "lines": [
+        {
+          "say": "Số hai: Superpowers, bộ kỹ năng cho Claude Code, hơn hai trăm bảy mươi nghìn sao.",
+          "cap": "Số 2: *Superpowers* cho Claude Code, 270K+ sao"
+        },
+        {
+          "say": "Nó bắt AI bàn ý tưởng và lên kế hoạch trước khi code.",
+          "cap": "AI phải lên *kế hoạch* trước khi code"
+        },
+        {
+          "say": "Viết test trước, rồi mới viết code. Ít lỗi hơn hẳn.",
+          "cap": "Viết *test* trước, rồi mới viết code"
+        }
+      ],
+      "host": {
+        "pose": "think",
+        "slot": "br"
+      }
+    },
+    {
+      "type": "repo",
+      "title": "Cả một công ty AI",
+      "rank": 3,
+      "repo": "msitarzewski/agency-agents",
+      "stars": "150K+",
+      "desc": "Hơn *140 nhân viên AI* chuyên biệt, chia theo phòng ban như một agency.",
+      "points": [
+        {
+          "icon": "users",
+          "text": "Kỹ sư, thiết kế, *marketing,* sales…"
+        },
+        {
+          "logo": "claude",
+          "text": "Dùng trong Claude Code, *Cursor,* Gemini CLI"
+        }
+      ],
+      "lines": [
+        {
+          "say": "Số ba: Agency Agents, hơn một trăm năm mươi nghìn sao.",
+          "cap": "Số 3: *Agency Agents,* 150K+ sao"
+        },
+        {
+          "say": "Hơn một trăm bốn mươi nhân viên AI, từ kỹ sư, thiết kế đến marketing.",
+          "cap": "Hơn *140 nhân viên AI* chuyên biệt"
+        },
+        {
+          "say": "Cài được vào Claude Code, Cursor, Gemini CLI.",
+          "cap": "Cài vào Claude Code, *Cursor,* Gemini CLI"
+        }
+      ],
+      "host": {
+        "pose": "thumbs",
+        "slot": "br",
+        "act": "hop"
+      }
+    },
+    {
+      "type": "list",
+      "title": "Chọn repo nào?",
+      "num": "?",
+      "items": [
+        {
+          "icon": "phone",
+          "title": "Trợ lý cá nhân",
+          "sub": "→ *OpenClaw*"
+        },
+        {
+          "icon": "code",
+          "title": "AI code chắc tay",
+          "sub": "→ *Superpowers*"
+        },
+        {
+          "icon": "users",
+          "title": "Cả một đội AI",
+          "sub": "→ *Agency Agents*"
+        }
+      ],
+      "lines": [
+        {
+          "say": "Vậy chọn cái nào?",
+          "cap": "Vậy chọn *cái nào?*"
+        },
+        {
+          "say": "Cần trợ lý cá nhân, chọn OpenClaw.",
+          "cap": "Trợ lý cá nhân → *OpenClaw*"
+        },
+        {
+          "say": "Muốn AI code chắc tay, chọn Superpowers.",
+          "cap": "AI code chắc tay → *Superpowers*"
+        },
+        {
+          "say": "Cần cả một đội AI, chọn Agency Agents.",
+          "cap": "Cả một đội AI → *Agency Agents*"
+        }
+      ],
+      "host": {
+        "pose": "present",
+        "slot": "br",
+        "flip": true
+      }
+    },
+    {
+      "type": "cta",
+      "question": "Bạn đã cài repo nào rồi?",
+      "host": {
+        "pose": "wave",
+        "slot": "top",
+        "act": "wave"
+      },
+      "lines": [
+        {
+          "say": "Lưu video lại để thử dần, và chia sẻ cho team của bạn.",
+          "cap": "*Lưu lại* và chia sẻ cho team của bạn"
+        },
+        {
+          "say": "Theo dõi AI Today chấm V N để cập nhật AI mỗi ngày.",
+          "cap": "Theo dõi *aitoday.vn* mỗi ngày"
+        },
+        {
+          "say": "Bạn đã dùng repo nào rồi? Comment cho mình biết nhé!",
+          "cap": "Bạn dùng repo nào rồi? *Comment* nhé!"
+        }
+      ]
+    }
+  ]
+}
