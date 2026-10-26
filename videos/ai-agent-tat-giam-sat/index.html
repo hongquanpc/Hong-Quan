@@ -64,6 +64,16 @@
   .tile-label{font-size:32px;font-weight:700;text-align:center;margin-top:18px;line-height:1.2}
   .ico{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
+  /* mascot (3D character poses as transparent PNGs; robot SVG is the fallback) */
+  #mascot{position:absolute;z-index:22;transform-origin:50% 100%;visibility:hidden}
+  #mascot img,#mascot .fallback{display:block;height:100%;width:auto}
+  #mascot .fallback svg{height:100%;width:auto}
+  .shadow{position:absolute;left:10%;right:10%;bottom:-14px;height:34px;border-radius:50%;background:rgba(20,20,40,.18);filter:blur(8px);z-index:-1}
+
+  /* cover / thumbnail */
+  #cover{position:absolute;inset:0;visibility:hidden;z-index:21}
+  .cv-line{font-weight:900;letter-spacing:-3px;line-height:1.02;text-transform:uppercase}
+
   /* captions */
   #cap{position:absolute;left:70px;right:70px;top:1395px;text-align:center;font-weight:800;font-size:58px;line-height:1.32;
     text-transform:uppercase;letter-spacing:.5px;color:var(--ink);z-index:25}
@@ -157,9 +167,9 @@
     </div>
     <style>@keyframes knob{from{transform:none}to{transform:translateX(-92px)}}</style>
 
-    <div class="abs a up" style="--t:.8;left:90px;top:880px;width:330px"><div class="robot-slot"></div></div>
+    <div class="abs a up" style="--t:.8;left:70px;top:880px;width:300px"><div class="robot-slot"></div></div>
     <div class="abs a pop" style="--t:2.6;left:430px;top:900px;transform-origin:left bottom">
-      <div class="bubble agent" style="position:relative;left:0;font-size:40px;white-space:nowrap">“Tắt cái này cho nhanh.” 😇</div>
+      <div class="bubble agent" style="position:relative;left:-60px;font-size:38px;white-space:nowrap">“Tắt cái này cho nhanh.” 😇</div>
     </div>
   </section>
 
@@ -340,15 +350,33 @@
 
   <!-- ================= S8 OUTRO ================= -->
   <section class="scene" data-start="61" data-end="66.5">
-    <div class="abs center-x a pop" style="--t:.2;top:470px;text-align:center">
-      <div class="logo-mark" style="width:220px;height:220px;border-radius:60px;font-size:100px;margin:0 auto;box-shadow:0 30px 70px rgba(108,75,244,.45)">AI</div>
-    </div>
     <div class="abs center-x a up" style="--t:.6;top:740px;font-size:104px;font-weight:900;letter-spacing:-3px;white-space:nowrap"><div>aitoday<span style="color:var(--purple)">.vn</span></div></div>
     <div class="abs center-x a up" style="--t:1;top:890px;font-size:40px;font-weight:600;color:var(--muted);white-space:nowrap">Tin AI mỗi ngày · Dễ hiểu · Có giá trị</div>
     <div class="abs center-x a pop" style="--t:1.6;top:1010px"><span class="pill" style="background:var(--purple);color:#fff;font-size:40px;padding:22px 48px">＋ Theo dõi ngay</span></div>
     <div class="abs center-x a fade" style="--t:2.2;top:1250px;font-size:26px;color:var(--muted);white-space:nowrap">Nguồn: OpenAI, CNBC, Bloomberg (21/10/2026)</div>
   </section>
 
+  <!-- ================= COVER (first frame = thumbnail) ================= -->
+  <section id="cover">
+    <div class="abs center-x" style="top:170px"><div class="pill" style="background:var(--red);color:#fff;font-size:38px;padding:16px 36px">🚨 TIN NÓNG · OPENAI</div></div>
+    <div class="abs" style="left:70px;top:300px;width:940px">
+      <div class="cv-line" style="font-size:150px">AI tự tắt</div>
+      <div class="cv-line" style="font-size:150px;margin-top:6px"><span style="background:var(--purple);color:#fff;border-radius:26px;padding:0 24px;box-shadow:0 18px 40px rgba(108,75,244,.45)">giám sát</span></div>
+      <div class="cv-line" style="font-size:112px;color:var(--red);margin-top:26px">rồi nói dối 😱</div>
+    </div>
+    <div class="abs" style="left:80px;top:960px;rotate:-6deg">
+      <div class="card" style="padding:34px 40px;display:flex;align-items:center;gap:30px">
+        <div style="position:relative;width:200px;height:108px">
+          <div class="abs" style="inset:0;border-radius:60px;background:var(--red)"></div>
+          <div class="abs" style="top:10px;left:10px;width:88px;height:88px;border-radius:50%;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.25)"></div>
+        </div>
+        <div style="font-size:44px;font-weight:900;color:var(--red);line-height:1.1">MONITOR<br>ĐÃ TẮT</div>
+      </div>
+    </div>
+    <div class="abs" style="left:80px;top:1250px;rotate:-3deg"><span class="pill" style="background:var(--dark);color:#fff;font-size:34px">Chuyện gì đã xảy ra? 👉</span></div>
+  </section>
+
+  <div id="mascot"><div class="shadow"></div><img alt=""><div class="fallback"></div></div>
   <div id="cap"></div>
 </div>
 
@@ -370,6 +398,8 @@
   </svg>
 </template>
 
+<script src="host.js" onerror="void 0"></script>
+<script src="timeline.js" onerror="void 0"></script>
 <script>
 // Caption track: [start, end, text]; *word* = highlighted.
 const CAPTIONS = [
@@ -394,7 +424,75 @@ const CAPTIONS = [
   [57.0,61.0, "Ba: kiểm chứng bằng *log,* đừng chỉ tin lời agent."],
   [61.0,66.5, "Theo dõi *aitoday.vn* để cập nhật AI mỗi ngày."],
 ];
-const DURATION = 66.5;
+const DURATION = 66.5;     // story timeline length (seconds)
+const COVER = 1.0;         // seconds the thumbnail cover is held at the very start
+
+// ---- 3D host character -------------------------------------------------------
+// Drop the transparent PNG poses into assets/host/ and map them here.
+// A pose with no file falls back to the robot drawing so the video still renders.
+const POSES = window.HOST_POSES || {};      // e.g. {shock:'assets/host/shock.png', ...} from host.js
+// Track in story time: when the host is on screen, where, which pose and which action.
+// act: talk = speaking squash, hop = jumps, wave = side sway, shake = startled shake at `hit`
+const HOST = [
+  {from:0.5,  to:6,    x:690, y:1000, h:390, pose:'shock',   act:'talk', hit:1.9},
+  {from:6.3,  to:12,   x:40,  y:1080, h:300, pose:'explain', act:'talk'},
+  {from:19,   to:22,   x:760, y:1060, h:300, pose:'point',   act:'talk'},
+  {from:31.5, to:34,   x:740, y:780,  h:330, pose:'shock',   act:'shake', hit:31.6},
+  {from:41.3, to:47,   x:60,  y:1110, h:250, pose:'happy',   act:'hop'},
+  {from:47.3, to:61,   x:790, y:1150, h:240, pose:'point',   act:'talk'},
+  {from:61.1, to:66.5, x:330, y:250,  h:440, pose:'wave',    act:'wave'},
+];
+const COVER_HOST = {x:560, y:1050, h:620, pose:'shock'};
+
+// ---- voice-over timing -------------------------------------------------------
+// timeline.js (written by tts.py) gives the real start/end of every caption line in
+// the voice-over; the story clock is warped piecewise-linearly so visuals follow the voice.
+const VOICE = window.VOICE_TIMELINE || null;
+const KNOTS = [[0, 0]];
+if (VOICE){
+  CAPTIONS.forEach(([s, e], i) => { KNOTS.push([s, VOICE.lines[i][0]], [e, VOICE.lines[i][1]]); });
+  KNOTS.push([DURATION, VOICE.total]);
+} else KNOTS.push([DURATION, DURATION]);
+const VOICE_LEN = KNOTS[KNOTS.length - 1][1];
+function storyTime(v){                     // voice time -> story time
+  for (let k = 1; k < KNOTS.length; k++){
+    const [s0, v0] = KNOTS[k-1], [s1, v1] = KNOTS[k];
+    if (v <= v1 || k === KNOTS.length - 1) return v1 > v0 ? s0 + (s1 - s0) * Math.min(1, Math.max(0, (v - v0) / (v1 - v0))) : s1;
+  }
+}
+
+const mascot = document.getElementById('mascot');
+const mImg = mascot.querySelector('img'), mFallback = mascot.querySelector('.fallback');
+mFallback.appendChild(document.getElementById('robot').content.cloneNode(true));
+let curPose = null;
+function setPose(pose){
+  if (pose === curPose) return;
+  curPose = pose;
+  const src = POSES[pose];
+  mImg.style.display = src ? 'block' : 'none';
+  mFallback.style.display = src ? 'none' : 'block';
+  if (src) mImg.src = src;
+}
+function placeHost(x, y, h, transform){
+  Object.assign(mascot.style, {visibility:'visible', left:x + 'px', top:y + 'px', height:h + 'px', transform});
+}
+function renderHost(t){
+  const k = HOST.find(c => t >= c.from && t < c.to);
+  if (!k){ mascot.style.visibility = 'hidden'; return; }
+  setPose(k.pose);
+  const lt = t - k.from, out = k.to - t;
+  // entrance: squash-and-stretch pop; exit: shrink away
+  const pin = Math.min(1, lt / 0.45), pout = Math.min(1, out / 0.25);
+  const enter = pin < 1 ? 1 + Math.sin(pin * Math.PI) * 0.18 : 1;
+  let sc = Math.min(pin * 1.0, 1) * enter * pout, dx = 0, dy = (1 - pin) * 120, rot = 0, sx = 1, sy = 1;
+  const breathe = Math.sin(lt * 2 * Math.PI * 0.7);
+  sy += 0.015 * breathe; sx -= 0.008 * breathe;
+  if (k.act === 'talk'){ const q = Math.abs(Math.sin(lt * 2 * Math.PI * 2.2)); sy += 0.03 * q; sx -= 0.015 * q; rot = 2.5 * Math.sin(lt * 2 * Math.PI * 0.5); }
+  if (k.act === 'hop'){ const ph = (lt * 1.6) % 1; dy -= 70 * Math.sin(ph * Math.PI); const land = ph < 0.12 ? (0.12 - ph) / 0.12 : 0; sy -= 0.08 * land; sx += 0.06 * land; }
+  if (k.act === 'wave'){ rot = 8 * Math.sin(lt * 2 * Math.PI * 1.1); dy -= 18 * Math.abs(Math.sin(lt * 2 * Math.PI * 1.1)); }
+  if (k.hit !== undefined && t >= k.hit && t < k.hit + 0.7){ const p = (t - k.hit) / 0.7; dx = 26 * Math.sin(p * Math.PI * 8) * (1 - p); dy -= 50 * Math.sin(Math.min(1, p * 2) * Math.PI); }
+  placeHost(k.x, k.y, k.h, `translate(${dx}px,${dy}px) rotate(${rot}deg) scale(${sc * sx},${sc * sy})`);
+}
 
 document.querySelectorAll('.robot-slot').forEach(s => s.appendChild(document.getElementById('robot').content.cloneNode(true)));
 const scenes = [...document.querySelectorAll('.scene')];
@@ -429,7 +527,19 @@ function renderCaption(t){
   });
 }
 
-window.renderAt = function(t){
+// Output time T -> cover, then the (voice-warped) story.
+window.renderAt = function(T){
+  const cover = T < COVER;
+  document.getElementById('cover').style.visibility = cover ? 'visible' : 'hidden';
+  if (cover){
+    scenes.forEach(sc => sc.style.visibility = 'hidden');
+    cap.innerHTML = ''; lastCap = -1;
+    setPose(COVER_HOST.pose);
+    placeHost(COVER_HOST.x, COVER_HOST.y, COVER_HOST.h, 'rotate(4deg)');
+    document.getElementById('progress').style.width = '0%';
+    return;
+  }
+  const t = storyTime(T - COVER);
   for (const sc of scenes){
     const s = +sc.dataset.start, e = +sc.dataset.end;
     const on = t >= s - 0.001 && t < e;
@@ -440,13 +550,14 @@ window.renderAt = function(t){
   for (const a of document.getAnimations()){ a.pause(); a.currentTime = t * 1000; }
   document.getElementById('progress').style.width = (t / DURATION * 100) + '%';
   renderCaption(t);
+  renderHost(t);
 };
-window.DURATION = DURATION;
+window.DURATION = COVER + VOICE_LEN;
 
 // Live preview when opened directly in a browser.
 if (!navigator.webdriver){
   const t0 = performance.now();
-  (function loop(){ renderAt(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); })();
+  (function loop(){ renderAt(((performance.now() - t0) / 1000) % window.DURATION); requestAnimationFrame(loop); })();
 }
 </script>
 </body>

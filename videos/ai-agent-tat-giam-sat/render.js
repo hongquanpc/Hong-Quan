@@ -1,5 +1,5 @@
 // Render index.html frame-by-frame into an MP4.
-// Usage: node render.js [out.mp4] [--fps 30] [--stills 1,5.5,20]
+// Usage: node render.js [out.mp4] [--fps 30] [--stills 1,5.5,20] [--thumb]
 const { chromium } = require('playwright');
 const { spawn } = require('child_process');
 const path = require('path');
@@ -15,6 +15,13 @@ const stills = opt('--stills', null);
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
   await page.goto('file://' + path.resolve(__dirname, 'index.html'));
   await page.evaluate(() => document.fonts.ready);
+
+  if (args.includes('--thumb')) {
+    await page.evaluate(() => window.renderAt(0));
+    await page.screenshot({ path: 'thumbnail.png' });
+    await browser.close();
+    return;
+  }
 
   if (stills) {
     for (const t of stills.split(',').map(Number)) {

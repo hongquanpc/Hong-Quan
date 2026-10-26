@@ -1,0 +1,6 @@
+.tts_cache/
+voice.wav
+music.wav
+video_noaudio.mp4
+still_*.png
+.env

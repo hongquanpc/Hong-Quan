@@ -1,13 +1,34 @@
 """Synthesize a soft background bed + transition SFX matched to the video timeline.
 Usage: python3 music.py out.wav"""
-import sys, wave
+import json, os, re, sys, wave
 import numpy as np
 
 SR = 44100
-DUR = 66.5
+STORY = 66.5          # story timeline length in index.html
+COVER = 1.0           # thumbnail cover held at the start (matches index.html)
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+# Story time -> output time, using the same voice warp as index.html.
+caps = [tuple(map(float, m)) for m in re.findall(r"\[\s*([\d.]+),\s*([\d.]+),\s*\"", open(os.path.join(HERE, "index.html")).read())]
+knots = [(0.0, 0.0)]
+tl = os.path.join(HERE, "timeline.js")
+if os.path.exists(tl):
+    v = json.loads(open(tl).read().split("=", 1)[1].rstrip().rstrip(";"))
+    for (s0, e0), (s1, e1) in zip(caps, v["lines"]):
+        knots += [(s0, s1), (e0, e1)]
+    knots.append((STORY, v["total"]))
+else:
+    knots.append((STORY, STORY))
+ks, kv = zip(*knots)
+
+def at(story_t):
+    return COVER + float(np.interp(story_t, ks, kv))
+
+DUR = at(STORY)
 BPM = 96
-SCENES = [0, 6, 12, 22, 34, 41, 47, 61]          # whoosh at each scene start
-POPS = [0.35, 2.6, 7.4, 13.5, 16.2, 19.4, 24.8, 26.6, 28.6, 29.3, 31.7, 35.6, 38.3, 44.1, 46, 50, 53.5, 57, 62.6]
+SCENES = [at(x) for x in [0, 6, 12, 22, 34, 41, 47, 61]]   # whoosh at each scene start
+POPS_STORY = [0.35, 2.6, 7.4, 13.5, 16.2, 19.4, 24.8, 26.6, 28.6, 29.3, 31.7, 35.6, 38.3, 44.1, 46, 50, 53.5, 57, 62.6]
+POPS = [at(x) for x in POPS_STORY]
 
 n = int(SR * DUR)
 t = np.arange(n) / SR
@@ -70,8 +91,12 @@ for p in POPS:
     f = 900 * np.exp(-k * 18) + 500
     add(0.18 * np.sin(2 * np.pi * np.cumsum(f) / SR) * e, p)
 
+# impact hit when the cover cuts to the story
+k, e = env(0.9, 0.002, 0.25)
+add(0.5 * np.sin(2 * np.pi * np.cumsum(60 * np.exp(-k * 6) + 38) / SR) * e, COVER)
+
 # fade in/out, normalize
-mix *= np.minimum(1, t / 0.5) * np.minimum(1, (DUR - t) / 2.0)
+mix *= np.minimum(1, t / 0.05) * np.minimum(1, (DUR - t) / 2.0)
 mix = np.tanh(mix * 1.2)
 mix = mix / np.max(np.abs(mix)) * 0.8
 pcm = (mix * 32767).astype(np.int16)
