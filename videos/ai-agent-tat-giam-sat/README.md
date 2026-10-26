@@ -9,10 +9,13 @@ Video dọc 1080×1920, dài 66 giây, phong cách motion-graphic trên nền gi
 
 ## Dựng lại video
 ```bash
-python3 music.py music.wav
-node render.js video_noaudio.mp4
-ffmpeg -i video_noaudio.mp4 -i music.wav -c:v copy -c:a aac -b:a 192k -shortest out.mp4
+export ELEVENLABS_API_KEY=...                        # không commit key
+python3 tts.py --voice DjY392W4TymVhSsT96jM          # giọng Minh Trí → voice.wav + timeline.js
+./build.sh                                           # video + thumbnail.png
 ```
+- `tts.py --list-voices` để xem các giọng; lời đọc nằm trong `LINES` (khớp 1:1 với `CAPTIONS`).
+- Hình, phụ đề và nhạc tự giãn theo độ dài giọng đọc (`timeline.js`).
+- Nhân vật dẫn chuyện: ảnh PNG trong `assets/host/`, khai báo ở `host.js`, vị trí/tư thế/hành động trong mảng `HOST` của `index.html`.
 Sửa phụ đề trong mảng `CAPTIONS` ở `index.html`. Từ nằm giữa hai dấu `*` sẽ được tô nền tím.
 
 ## Kịch bản lồng tiếng

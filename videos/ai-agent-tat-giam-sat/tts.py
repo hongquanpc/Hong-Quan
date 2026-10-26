@@ -32,7 +32,7 @@ LINES = [
     "Theo dõi AI Today chấm V N để cập nhật AI mỗi ngày nhé!",
 ]
 SCENE_STARTS = {2, 4, 7, 11, 13, 15, 19}   # line indexes that open a new scene
-GAP, SCENE_GAP, LEAD, TAIL = 0.12, 0.45, 0.25, 1.6
+GAP, SCENE_GAP, LEAD, TAIL = 0.25, 0.7, 0.25, 1.8
 SR = 44100
 API = "https://api.elevenlabs.io/v1"
 
@@ -102,6 +102,9 @@ def main():
 
     with wave.open("voice.wav", "wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR); w.writeframes(bytes(out))
+    # even out loudness across voices (some library voices are recorded very quietly)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", "voice.wav", "-af", "loudnorm=I=-15:TP=-1.5:LRA=9", "-ar", str(SR), "voice_norm.wav"], check=True)
+    os.replace("voice_norm.wav", "voice.wav")
     with open("timeline.js", "w") as f:
         f.write("window.VOICE_TIMELINE = " + json.dumps({"lines": lines, "total": round(t, 3)}) + ";\n")
     print(f"voice.wav + timeline.js written, total {t:.1f}s")
