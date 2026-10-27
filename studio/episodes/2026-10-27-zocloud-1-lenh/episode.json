@@ -3,7 +3,7 @@
   "date": "2026-10-27",
   "title": "Vibe code xong, 1 lệnh là app online với ZoCloud",
   "format": "tutorial",
-  "status": "draft: terminal output and live recording are placeholders until the real deploy runs",
+  "status": "terminal output is real; live recording waits for *.zocloud.app network access",
   "brand": {
     "name": "aitoday.vn",
     "tagline": "Tin AI mỗi ngày · Dễ hiểu · Có giá trị"
@@ -48,13 +48,13 @@
   "facts": [
     {
       "claim": "Cài zo CLI: curl -fsSL https://app.zocloud.io/install.sh | sh",
-      "check": "https://zocloud.io/docs/cli.html",
-      "checked": false
+      "check": "chạy thật 27/10/2026 (media/install.json)",
+      "checked": true
     },
     {
-      "claim": "zo deploy -to org/project/service tự tạo project, build và in địa chỉ HTTPS",
-      "check": "chạy thật trong video",
-      "checked": false
+      "claim": "zo deploy tự nhận diện Node.js, build trong 20s, app chạy tại https://web-cafe.zocloud.app",
+      "check": "chạy thật 27/10/2026 (media/deploy.json, status.json)",
+      "checked": true
     },
     {
       "claim": "zo mcp cho Claude Code / Cursor tự deploy (deploy_folder)",
@@ -187,22 +187,16 @@
       "prompt": "~/cafe-pho-co $",
       "steps": [
         {
-          "cmd": "curl -fsSL https://app.zocloud.io/install.sh | sh",
           "line": 0,
-          "out": [
-            "[BẢN NHÁP] output thật sẽ thay khi chạy deploy"
-          ]
+          "outDur": 0.8
         },
         {
-          "cmd": "zo deploy -to myorg/cafe/web",
           "line": 1,
-          "outLine": 2,
-          "outDur": 3,
-          "out": [
-            "[BẢN NHÁP] log build thật",
-            "[BẢN NHÁP] …",
-            "[BẢN NHÁP] https://web-cafe.zocloud.app"
-          ]
+          "outDur": 2.4
+        },
+        {
+          "line": 2,
+          "outDur": 0.6
         }
       ],
       "lines": [
@@ -211,14 +205,16 @@
           "cap": "Bước 1: cài *zo CLI*"
         },
         {
-          "say": "Bước hai: gõ zo deploy.",
-          "cap": "Bước 2: gõ *zo deploy*"
+          "say": "Bước hai: gõ zo deploy. Nó tự nhận ra Node.js và build trong hai mươi giây.",
+          "cap": "Bước 2: *zo deploy,* build 20 giây"
         },
         {
-          "say": "Nó tự nhận ra Node.js, tự build, rồi trả về link HTTPS.",
-          "cap": "Tự build, trả về *link HTTPS*"
+          "say": "Gõ zo status, link HTTPS đã sẵn sàng!",
+          "cap": "Đã có *link HTTPS!*"
         }
-      ]
+      ],
+      "src": "media/terminal.json",
+      "note": "Output thật: install.json, deploy.json (lọc bớt dòng build), status.json — chạy ngày 27/10/2026"
     },
     {
       "type": "screen",

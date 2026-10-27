@@ -1,0 +1,61 @@
+[
+ {
+  "cmd": "curl -fsSL https://app.zocloud.io/install.sh | sh",
+  "out": [
+   {
+    "t": 6.49,
+    "text": "zo installed in /usr/local/bin/zo"
+   },
+   {
+    "t": 6.5,
+    "text": "zo 8d5b34f"
+   }
+  ]
+ },
+ {
+  "cmd": "zo deploy -to sky-a413b7/cafe/web",
+  "out": [
+   {
+    "t": 2.1,
+    "text": "Đã đóng gói 3 file (0.0 MB), đang tải lên…"
+   },
+   {
+    "t": 2.65,
+    "text": "→ đang build"
+   },
+   {
+    "t": 3.9,
+    "text": "==> Detected Node.js (node); building with a generated Dockerfile"
+   },
+   {
+    "t": 18.99,
+    "text": "found 0 vulnerabilities"
+   },
+   {
+    "t": 23.97,
+    "text": "==> Built in 20s; pushing"
+   },
+   {
+    "t": 31.57,
+    "text": "→ đang triển khai"
+   }
+  ]
+ },
+ {
+  "cmd": "zo status",
+  "out": [
+   {
+    "t": 1.5,
+    "text": "sky-a413b7/cafe/web  https://web-cafe.zocloud.app"
+   },
+   {
+    "t": 1.5,
+    "text": "1/1 bản chạy ổn"
+   },
+   {
+    "t": 1.76,
+    "text": "  #1  đang chạy    upload:56fcd"
+   }
+  ]
+ }
+]

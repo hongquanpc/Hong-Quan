@@ -1,0 +1,460 @@
+[
+ {
+  "cmd": "zo deploy -to sky-a413b7/cafe/web",
+  "code": 1,
+  "out": [
+   {
+    "t": 2.1,
+    "text": "Đã đóng gói 3 file (0.0 MB), đang tải lên…"
+   },
+   {
+    "t": 2.4,
+    "text": "Deploy #1 đã bắt đầu"
+   },
+   {
+    "t": 2.65,
+    "text": "→ đang build"
+   },
+   {
+    "t": 3.9,
+    "text": "  ==> Unpacking the uploaded source (1776 bytes)"
+   },
+   {
+    "t": 3.9,
+    "text": "  ==> Detected Node.js (node); building with a generated Dockerfile"
+   },
+   {
+    "t": 3.9,
+    "text": "  ==> No build cache in the registry yet"
+   },
+   {
+    "t": 3.9,
+    "text": "  time=\"2026-10-27T11:33:19+07:00\" level=warning msg=\"failed check for fsverity support\" error=\"enable fsverity failed: operation not supported\" path=/var/lib/zocloud-build/jobs/01a17ba2-573d-7d8a-8bd4-7f9b30434a7c/cache-out"
+   },
+   {
+    "t": 3.9,
+    "text": "  time=\"2026-10-27T11:33:19+07:00\" level=warning msg=\"failed check for fsverity support\" error=\"enable fsverity failed: operation not supported\" path=/var/lib/zocloud-build/jobs/01a17ba2-573d-7d8a-8bd4-7f9b30434a7c/image"
+   },
+   {
+    "t": 3.9,
+    "text": "  #1 [internal] load build definition from Dockerfile"
+   },
+   {
+    "t": 3.9,
+    "text": "  #1 transferring dockerfile: 494B done"
+   },
+   {
+    "t": 3.9,
+    "text": "  #1 DONE 0.0s"
+   },
+   {
+    "t": 3.9,
+    "text": "  #2 [internal] load metadata for docker.io/library/node:22-trixie-slim"
+   },
+   {
+    "t": 5.14,
+    "text": "  #2 DONE 1.1s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #3 [internal] load .dockerignore"
+   },
+   {
+    "t": 5.14,
+    "text": "  #3 transferring context: 2B done"
+   },
+   {
+    "t": 5.14,
+    "text": "  #3 DONE 0.0s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #4 [internal] load build context"
+   },
+   {
+    "t": 5.14,
+    "text": "  #4 DONE 0.0s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 [stage-0 1/5] FROM docker.io/library/node:22-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 resolve docker.io/library/node:22-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf 0.0s done"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 DONE 0.5s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #4 [internal] load build context"
+   },
+   {
+    "t": 5.14,
+    "text": "  #4 transferring context: 3.26kB 0.0s done"
+   },
+   {
+    "t": 5.14,
+    "text": "  #4 DONE 0.1s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 [stage-0 1/5] FROM docker.io/library/node:22-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 sha256:2e321d024f07df773afe75c15ece967e2f16441411ca8b0b5535043f0c355c5b 0B / 448B 0.2s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 sha256:2e321d024f07df773afe75c15ece967e2f16441411ca8b0b5535043f0c355c5b 448B / 448B 0.2s done"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 sha256:5c28a6dd865e39eb2564d513384555b3b5d8ba28cb5f59fa4272299a924aa072 0B / 1.72MB 0.3s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 0B / 49.93MB 0.2s"
+   },
+   {
+    "t": 5.14,
+    "text": "  #5 sha256:c1f87252290b498e6c534a3751ad2da0554b2c21327c63d08e82cf44aadd4337 0B / 3.31kB 0.2s"
+   },
+   {
+    "t": 6.52,
+    "text": "  #5 sha256:c1f87252290b498e6c534a3751ad2da0554b2c21327c63d08e82cf44aadd4337 3.31kB / 3.31kB 0.4s done"
+   },
+   {
+    "t": 6.52,
+    "text": "  #5 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0B / 29.84MB 0.2s"
+   },
+   {
+    "t": 6.52,
+    "text": "  #5 sha256:5c28a6dd865e39eb2564d513384555b3b5d8ba28cb5f59fa4272299a924aa072 1.72MB / 1.72MB 1.0s done"
+   },
+   {
+    "t": 6.52,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 7.34MB / 49.93MB 1.1s"
+   },
+   {
+    "t": 6.52,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 16.78MB / 49.93MB 1.2s"
+   },
+   {
+    "t": 6.52,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 20.97MB / 49.93MB 1.4s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 26.21MB / 49.93MB 1.5s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 4.19MB / 29.84MB 1.2s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 35.65MB / 49.93MB 1.7s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 9.44MB / 29.84MB 1.4s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 38.80MB / 49.93MB 1.8s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 16.78MB / 29.84MB 1.5s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 49.93MB / 49.93MB 2.0s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 1.8s"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 49.93MB / 49.93MB 2.5s done"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 29.84MB / 29.84MB 2.2s done"
+   },
+   {
+    "t": 7.77,
+    "text": "  #5 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034"
+   },
+   {
+    "t": 10.26,
+    "text": "  #5 extracting sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 2.1s done"
+   },
+   {
+    "t": 10.26,
+    "text": "  #5 DONE 5.2s"
+   },
+   {
+    "t": 10.26,
+    "text": "  #5 [stage-0 1/5] FROM docker.io/library/node:22-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf"
+   },
+   {
+    "t": 10.26,
+    "text": "  #5 extracting sha256:c1f87252290b498e6c534a3751ad2da0554b2c21327c63d08e82cf44aadd4337"
+   },
+   {
+    "t": 12.75,
+    "text": "  #5 extracting sha256:c1f87252290b498e6c534a3751ad2da0554b2c21327c63d08e82cf44aadd4337 1.9s done"
+   },
+   {
+    "t": 12.75,
+    "text": "  #5 DONE 7.1s"
+   },
+   {
+    "t": 12.75,
+    "text": "  #5 [stage-0 1/5] FROM docker.io/library/node:22-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf"
+   },
+   {
+    "t": 12.75,
+    "text": "  #5 extracting sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10"
+   },
+   {
+    "t": 16.49,
+    "text": "  #5 extracting sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 3.9s done"
+   },
+   {
+    "t": 16.49,
+    "text": "  #5 DONE 11.1s"
+   },
+   {
+    "t": 16.49,
+    "text": "  #5 [stage-0 1/5] FROM docker.io/library/node:22-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf"
+   },
+   {
+    "t": 16.49,
+    "text": "  #5 extracting sha256:5c28a6dd865e39eb2564d513384555b3b5d8ba28cb5f59fa4272299a924aa072"
+   },
+   {
+    "t": 16.49,
+    "text": "  #5 extracting sha256:5c28a6dd865e39eb2564d513384555b3b5d8ba28cb5f59fa4272299a924aa072 0.3s done"
+   },
+   {
+    "t": 16.49,
+    "text": "  #5 DONE 11.3s"
+   },
+   {
+    "t": 17.74,
+    "text": "  #5 [stage-0 1/5] FROM docker.io/library/node:22-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf"
+   },
+   {
+    "t": 17.74,
+    "text": "  #5 extracting sha256:2e321d024f07df773afe75c15ece967e2f16441411ca8b0b5535043f0c355c5b"
+   },
+   {
+    "t": 17.74,
+    "text": "  #5 extracting sha256:2e321d024f07df773afe75c15ece967e2f16441411ca8b0b5535043f0c355c5b 0.6s done"
+   },
+   {
+    "t": 17.74,
+    "text": "  #5 DONE 12.0s"
+   },
+   {
+    "t": 17.74,
+    "text": "  #6 [stage-0 2/5] WORKDIR /app"
+   },
+   {
+    "t": 17.74,
+    "text": "  #6 DONE 0.7s"
+   },
+   {
+    "t": 17.74,
+    "text": "  #7 [stage-0 3/5] RUN chown node:node /app"
+   },
+   {
+    "t": 17.74,
+    "text": "  #7 DONE 0.2s"
+   },
+   {
+    "t": 17.74,
+    "text": "  #8 [stage-0 4/5] COPY --chown=node:node . ."
+   },
+   {
+    "t": 18.99,
+    "text": "  #8 DONE 0.6s"
+   },
+   {
+    "t": 18.99,
+    "text": "  #9 [stage-0 5/5] RUN --mount=type=secret,id=zocloud-env,target=/run/secrets/zocloud.env,required=false,mode=0444 : zc-cache-scope=7d91bbd5e609bf0135ac54b0; set -a; [ ! -f /run/secrets/zocloud.env ] || . /run/secrets/zocloud.env; set +a; npm install"
+   },
+   {
+    "t": 18.99,
+    "text": "  #9 0.822 "
+   },
+   {
+    "t": 18.99,
+    "text": "  #9 0.822 up to date, audited 1 package in 524ms"
+   },
+   {
+    "t": 18.99,
+    "text": "  #9 0.823 "
+   },
+   {
+    "t": 18.99,
+    "text": "  #9 0.823 found 0 vulnerabilities"
+   },
+   {
+    "t": 20.23,
+    "text": "  #9 DONE 1.3s"
+   },
+   {
+    "t": 20.23,
+    "text": "  #10 exporting to oci image format"
+   },
+   {
+    "t": 20.23,
+    "text": "  #10 exporting layers"
+   },
+   {
+    "t": 21.48,
+    "text": "  #10 exporting layers 1.2s done"
+   },
+   {
+    "t": 21.48,
+    "text": "  #10 exporting manifest sha256:69be7e73acb207c36d602edcd104f41ab818d4e4cb491b0bf42fde1ebd0ae2cd 0.1s done"
+   },
+   {
+    "t": 21.48,
+    "text": "  #10 exporting config sha256:b7e44d26b918dc864a61da5cc0cdb5e8a9e368a020d70674c6f27ca93f7847aa 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #10 DONE 2.4s"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 exporting cache to client directory"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 preparing build cache for export 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 sending cache export"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:69482e92a6ff8a1abe07361775b1c94104625102ffcc1126781bf8acaa59e356"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:34656ba7daf70ae89ca8dca82d1210084bf16dbc823f35563c27b07f665710f7"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:2e321d024f07df773afe75c15ece967e2f16441411ca8b0b5535043f0c355c5b 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:5c28a6dd865e39eb2564d513384555b3b5d8ba28cb5f59fa4272299a924aa072"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:987cfa00ece1ea353c8c75259aa090a501984943fd984db2f5c73f402bbe3fc4"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:69482e92a6ff8a1abe07361775b1c94104625102ffcc1126781bf8acaa59e356 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:34656ba7daf70ae89ca8dca82d1210084bf16dbc823f35563c27b07f665710f7 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:5c28a6dd865e39eb2564d513384555b3b5d8ba28cb5f59fa4272299a924aa072 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:987cfa00ece1ea353c8c75259aa090a501984943fd984db2f5c73f402bbe3fc4 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:c1f87252290b498e6c534a3751ad2da0554b2c21327c63d08e82cf44aadd4337"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:f3dba3044e763c3a8ec839f800ba2c8d4ff6c72fb82dbcc0fbc212fbcab1f1b7"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:c1f87252290b498e6c534a3751ad2da0554b2c21327c63d08e82cf44aadd4337 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:f3dba3044e763c3a8ec839f800ba2c8d4ff6c72fb82dbcc0fbc212fbcab1f1b7 0.1s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:f2be67225471500c788ce88c597eb5ea8336e912ad1ca4815650e0281afe2034 0.6s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing layer sha256:f57543c2ecee371793696192a2a1ccc723cb4c64e643e8f717d79ec4417bca10 0.8s done"
+   },
+   {
+    "t": 22.73,
+    "text": "  #11 writing config sha256:6c2183b61ee2b710ace84b9f5698f0ec14163cec224d4c0d83ddfd70496eebc8"
+   },
+   {
+    "t": 23.97,
+    "text": "  #11 writing config sha256:6c2183b61ee2b710ace84b9f5698f0ec14163cec224d4c0d83ddfd70496eebc8 0.2s done"
+   },
+   {
+    "t": 23.97,
+    "text": "  #11 sending cache export 1.3s done"
+   },
+   {
+    "t": 23.97,
+    "text": "  #11 writing cache image manifest sha256:f1cdc76601cc50fb44939530e34afa73ef6e8c736e76194dd6aceaa54f419367 0.0s done"
+   },
+   {
+    "t": 23.97,
+    "text": "  #11 DONE 1.3s"
+   },
+   {
+    "t": 23.97,
+    "text": "  ==> Built in 20s; pushing"
+   },
+   {
+    "t": 30.33,
+    "text": "  ==> Pushed 10.88.250.254:5443/svc/01a17ba2560578c4af4c7ca1fabbcacb@sha256:69be7e73acb207c36d602edcd104f41ab818d4e4cb491b0bf42fde1ebd0ae2cd"
+   },
+   {
+    "t": 30.33,
+    "text": "  ==> Pushed build cache f1cdc76601cc"
+   },
+   {
+    "t": 31.57,
+    "text": "→ đang triển khai"
+   },
+   {
+    "t": 41.26,
+    "text": "zo: Get \"https://api.zocloud.io/v1/orgs/sky-a413b7/projects/cafe/services/web/deployments/1/log?after=124\": read tcp 127.0.0.1:59206->127.0.0.1:45283: read: connection reset by peer"
+   }
+  ]
+ }
+]

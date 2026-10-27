@@ -1,0 +1,20 @@
+[
+ {
+  "cmd": "zo status",
+  "code": 0,
+  "out": [
+   {
+    "t": 1.5,
+    "text": "sky-a413b7/cafe/web  https://web-cafe.zocloud.app"
+   },
+   {
+    "t": 1.5,
+    "text": "1/1 bản chạy ổn"
+   },
+   {
+    "t": 1.76,
+    "text": "  #1  đang chạy    upload:56fcd"
+   }
+  ]
+ }
+]
