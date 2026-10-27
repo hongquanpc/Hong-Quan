@@ -120,7 +120,9 @@ else:
         for i, (s, e) in enumerate(tl["lines"]):
             heard = " ".join(w["text"] for w in words if w["start"] >= s - 0.2 and w["end"] <= e + 0.3)
             exp, got = norm(lines[i].get("hear") or lines[i]["say"]), norm(heard)
-            r = difflib.SequenceMatcher(None, exp, got).ratio()
+            # word match, or character match ignoring spaces ("zo status" vs "zostatus", "zocloud chấm i o" vs "zocloud.io")
+            r = max(difflib.SequenceMatcher(None, exp, got).ratio(),
+                    difflib.SequenceMatcher(None, "".join(exp), "".join(got)).ratio())
             msg = f"câu {i} ({r:.0%}): viết “{lines[i]['say']}” — nghe “{heard}”"
             if r < 0.75:
                 fails.append(msg)
