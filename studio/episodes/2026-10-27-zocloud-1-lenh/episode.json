@@ -62,9 +62,9 @@
       "checked": false
     },
     {
-      "claim": "Gói miễn phí 500MB (500MB là gì: RAM, đĩa hay lưu trữ?)",
-      "check": "Nhân Hòa xác nhận",
-      "checked": false
+      "claim": "Gói Trial miễn phí: 512 MB RAM, 0.5 vCPU, 2 service, 1 database, 1 GB volume; gói Hobby 119.000đ/tháng (+10% VAT)",
+      "check": "Ảnh bảng giá ZoCloud do Nhân Hòa gửi ngày 27/10/2026",
+      "checked": true
     },
     {
       "claim": "Máy chủ tại Việt Nam (Hà Nội), thanh toán VND, hoá đơn VAT",
@@ -287,8 +287,8 @@
         {
           "icon": "money",
           "color": "var(--green)",
-          "title": "Gói miễn phí 500MB",
-          "sub": "Thử ngay, không mất tiền"
+          "title": "Gói Trial *miễn phí*",
+          "sub": "512 MB RAM · 2 service · 1 database"
         },
         {
           "icon": "code",
@@ -298,8 +298,8 @@
         {
           "icon": "home",
           "color": "var(--orange)",
-          "title": "Máy chủ tại Việt Nam",
-          "sub": "Trả bằng VND, có *hoá đơn VAT*"
+          "title": "Hobby 119.000đ/tháng",
+          "sub": "Máy chủ VN · *hoá đơn VAT*"
         }
       ],
       "lines": [
@@ -308,16 +308,16 @@
           "cap": "Vậy *ZoCloud* có gì?"
         },
         {
-          "say": "Có gói miễn phí năm trăm MB để thử.",
-          "cap": "Gói *miễn phí* 500MB để thử"
+          "say": "Gói Trial miễn phí, năm trăm mười hai MB RAM, có cả database.",
+          "cap": "Gói Trial *miễn phí:* 512 MB RAM"
         },
         {
-          "say": "Chạy Node.js, Next.js, Python, PHP, có cả database.",
+          "say": "Chạy Node.js, Next.js, Python, PHP.",
           "cap": "Node.js, Next.js, Python, *PHP*"
         },
         {
-          "say": "Máy chủ tại Việt Nam, có hoá đơn VAT.",
-          "cap": "Máy chủ VN, có *hoá đơn VAT*"
+          "say": "Cần nhiều hơn thì gói Hobby một trăm mười chín nghìn một tháng, có hoá đơn VAT.",
+          "cap": "Gói Hobby *119K/tháng,* có hoá đơn VAT"
         }
       ]
     },
