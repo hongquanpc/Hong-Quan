@@ -12,7 +12,7 @@ fs.mkdirSync(build, { recursive: true });
 
 // ---- validation: fail early with a readable message
 const errors = [];
-const TYPES = ['cover', 'headline', 'list', 'compare', 'stat', 'repo', 'code', 'chat', 'flow', 'cta', 'screen', 'article', 'tweet', 'photo'];
+const TYPES = ['cover', 'headline', 'list', 'compare', 'stat', 'repo', 'code', 'chat', 'flow', 'cta', 'screen', 'article', 'tweet', 'photo', 'terminal'];
 if (!ep.scenes?.length) errors.push('episode has no scenes');
 if (ep.scenes?.[0]?.type !== 'cover') errors.push('scene 0 must be type "cover" (it is the thumbnail + hook)');
 if (ep.scenes?.at(-1)?.type !== 'cta') errors.push('last scene must be type "cta"');
@@ -105,6 +105,19 @@ ep.scenes.forEach((sc, i) => {
     const m = files.map(f => ({ src: path.relative(ENGINE, f), ...probe(f) }));
     sc._media = sc.type === 'photo' ? m : m[0];
   }
+});
+// terminal capture (capture-term.py): [{cmd, out:[{t,text}]}] -> steps with relative output timing
+ep.scenes.forEach((sc, i) => {
+  if (sc.type !== 'terminal' || !sc.src) return;
+  const f = path.resolve(epDir, sc.src);
+  if (!fs.existsSync(f)) { mediaErr.push(`scene ${i}: file not found ${f}`); return; }
+  const cap = JSON.parse(fs.readFileSync(f, 'utf8'));
+  sc._term = cap.map((c, k) => {
+    const meta = (sc.steps || [])[k] || {};
+    const keep = c.out.filter(o => !(meta.hide || []).some(h => o.text.includes(h)));   // drop noisy lines
+    const T = keep.length ? keep.at(-1).t || 1 : 1;
+    return { ...meta, cmd: c.cmd, out: keep.map(o => o.text), times: keep.map(o => (o.t || 0) / T) };
+  });
 });
 if (mediaErr.length) { console.error('media errors:\n - ' + mediaErr.join('\n - ')); process.exit(1); }
 

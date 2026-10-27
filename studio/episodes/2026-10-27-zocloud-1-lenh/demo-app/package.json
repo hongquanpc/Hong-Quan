@@ -1,0 +1,8 @@
+{
+  "name": "cafe-pho-co",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo app vibe-coded for the aitoday.vn ZoCloud video",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=20" }
+}

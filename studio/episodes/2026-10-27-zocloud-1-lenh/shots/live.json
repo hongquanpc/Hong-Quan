@@ -1,0 +1,2 @@
+{ "url": "file:///home/user/Hong-Quan/studio/episodes/2026-10-27-zocloud-1-lenh/demo-app/index.html", "device": "phone",
+  "steps": [ {"wait": 1200}, {"click": "text=Xem menu", "after": 1500}, {"scroll": 400, "after": 1200}, {"hover": "text=Cà phê trứng", "after": 1200} ] }

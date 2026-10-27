@@ -3,7 +3,7 @@
 // L(j) = absolute start time of the scene's j-th voice line (from build/data.js -> TL).
 (function () {
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  const rich = s => esc(s).replace(/\*([^*]+)\*/g, '<span class="hl">$1</span>');
+  const rich = s => esc(s).replace(/\*([^*]+)\*/g, '<span class="hl">$1</span>').replace(/\n/g, '<br>');
   const el = html => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; };
   let LOGOS = {};
 
@@ -305,6 +305,38 @@
       root.appendChild(beat(card, 'up', L(0)));
       const img = card.querySelector('img'), a = L(0), b = a + 8;
       return t => { const p = Math.min(1, Math.max(0, (t - a) / (b - a))); img.style.transform = `scale(${1.04 + 0.1 * p})`; };
+    },
+
+    // Terminal replay: typed commands + their real output (from capture-term.py via prepare.js, or inline "out")
+    terminal(sc, root, L) {
+      header(sc, root, L);
+      const top = sc.title ? 290 : 230, H = sc.height || 900, rows = Math.floor((H - 110) / 44);
+      const win = el(`<div class="abs" data-box style="left:70px;top:${top}px;width:940px;height:${H}px;border-radius:30px;background:#0f1020;box-shadow:0 30px 70px rgba(20,20,40,.35);overflow:hidden">
+        <div style="height:60px;background:#1c1d33;display:flex;align-items:center;gap:14px;padding:0 26px"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div>
+        <div style="margin-left:18px;font-size:24px;color:#9a9bb8;font-weight:600">${esc(sc.window || 'Terminal')}</div></div>
+        <div class="tx" style="padding:24px 30px;font-family:'DejaVu Sans Mono',monospace;font-size:28px;line-height:44px;color:#e8e8f4;white-space:pre-wrap;word-break:break-all"></div></div>`);
+      root.appendChild(beat(win, 'up', L(0) - 0.1));
+      const tx = win.querySelector('.tx');
+      const steps = (sc._term || sc.steps).map((st, i) => {
+        const t0 = L(st.line ?? i) + 0.2, typeEnd = t0 + st.cmd.length * 0.045;
+        const outAt = st.outLine !== undefined ? L(st.outLine) : typeEnd + 0.3;
+        const span = st.outDur ?? 2.5, times = st.times || st.out.map((_, k) => k / Math.max(1, st.out.length - 1));
+        return { ...st, t0, typeEnd, outs: st.out.map((o, k) => ({ text: o, at: outAt + times[k] * span })) };
+      });
+      const color = line => /^(✓|✔|OK|Done|Thành công)/i.test(line) ? '#4ade80' : /error|lỗi|failed/i.test(line) ? '#f87171' : /https?:\/\//.test(line) ? '#a78bfa' : '#c9cae0';
+      const fmt = line => esc(line).replace(/(https?:\/\/\S+)/g, '<span style="text-decoration:underline;font-weight:700">$1</span>');
+      let last = '';
+      return t => {
+        const out = [];
+        for (const st of steps) {
+          if (t < st.t0) break;
+          const n = Math.min(st.cmd.length, Math.floor((t - st.t0) / 0.045));
+          out.push(`<span style="color:#4ade80">${esc(sc.prompt || '$')}</span> <span style="color:#fff">${esc(st.cmd.slice(0, n))}</span>${t < st.typeEnd + 0.3 && Math.floor(t * 2) % 2 === 0 ? '<span style="background:#e8e8f4">&nbsp;</span>' : ''}`);
+          for (const o of st.outs) if (t >= o.at) out.push(`<span style="color:${color(o.text)}">${fmt(o.text)}</span>`);
+        }
+        const html = out.slice(-rows).join('\n');
+        if (html !== last) { tx.innerHTML = html; last = html; }
+      };
     },
 
     // Outro: brand + like/save/share/follow + comment prompt + sources

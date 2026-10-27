@@ -1,0 +1,348 @@
+{
+  "id": "2026-10-27-zocloud-1-lenh",
+  "date": "2026-10-27",
+  "title": "Vibe code xong, 1 lệnh là app online với ZoCloud",
+  "format": "tutorial",
+  "status": "draft: terminal output and live recording are placeholders until the real deploy runs",
+  "brand": {
+    "name": "aitoday.vn",
+    "tagline": "Tin AI mỗi ngày · Dễ hiểu · Có giá trị"
+  },
+  "voice": {
+    "id": "DjY392W4TymVhSsT96jM",
+    "model": "eleven_v4",
+    "speed": 1.08
+  },
+  "sponsor": "Hợp tác cùng Nhân Hòa (ZoCloud là sản phẩm của Nhân Hòa)",
+  "post": {
+    "caption": "Vibe code xong không biết đưa app lên mạng? 1 lệnh zo deploy là có link HTTPS. Bạn đã vibe code app gì? 👇 #hợptác cùng Nhân Hòa",
+    "hashtags": [
+      "#VibeCoding",
+      "#ZoCloud",
+      "#ClaudeCode",
+      "#Deploy",
+      "#AI",
+      "#aitoday"
+    ]
+  },
+  "sources": [
+    {
+      "name": "ZoCloud",
+      "title": "Trang chủ ZoCloud",
+      "url": "https://zocloud.io/",
+      "date": "2026-10-27"
+    },
+    {
+      "name": "ZoCloud Docs",
+      "title": "zo CLI và MCP server",
+      "url": "https://zocloud.io/docs/cli.html",
+      "date": "2026-10-27"
+    },
+    {
+      "name": "ZoCloud Blog",
+      "title": "Vibe coding, deploy app từ Cursor và Claude Code qua MCP",
+      "url": "https://zocloud.io/blog/vibe-coding-deploy-cursor-claude/",
+      "date": "2026-10-27"
+    }
+  ],
+  "facts": [
+    {
+      "claim": "Cài zo CLI: curl -fsSL https://app.zocloud.io/install.sh | sh",
+      "check": "https://zocloud.io/docs/cli.html",
+      "checked": false
+    },
+    {
+      "claim": "zo deploy -to org/project/service tự tạo project, build và in địa chỉ HTTPS",
+      "check": "chạy thật trong video",
+      "checked": false
+    },
+    {
+      "claim": "zo mcp cho Claude Code / Cursor tự deploy (deploy_folder)",
+      "check": "https://zocloud.io/blog/vibe-coding-deploy-cursor-claude/",
+      "checked": false
+    },
+    {
+      "claim": "Gói miễn phí 500MB (500MB là gì: RAM, đĩa hay lưu trữ?)",
+      "check": "Nhân Hòa xác nhận",
+      "checked": false
+    },
+    {
+      "claim": "Máy chủ tại Việt Nam (Hà Nội), thanh toán VND, hoá đơn VAT",
+      "check": "https://zocloud.io/llms.txt",
+      "checked": false
+    },
+    {
+      "claim": "Hỗ trợ Node.js, Next.js, Python, PHP; PostgreSQL, MySQL, Redis",
+      "check": "https://zocloud.io/",
+      "checked": false
+    }
+  ],
+  "scenes": [
+    {
+      "type": "cover",
+      "tag": "🚀 VIBE CODING",
+      "headline": [
+        "Code xong",
+        "*1 lệnh*",
+        "là online!"
+      ],
+      "logos": [
+        "zocloud",
+        "claude"
+      ],
+      "note": "Làm theo ngay 👉",
+      "sticker": "✋ DỪNG LẠI!",
+      "host": {
+        "pose": "point"
+      },
+      "lines": [
+        {
+          "say": "Dừng lại! Vibe code xong app mà không biết đưa lên mạng? Chỉ một lệnh là online!"
+        }
+      ]
+    },
+    {
+      "type": "chat",
+      "title": "Vibe code xong… rồi *kẹt*",
+      "messages": [
+        {
+          "from": "user",
+          "name": "Bạn",
+          "text": "Viết cho mình trang web quán cà phê"
+        },
+        {
+          "from": "ai",
+          "name": "AI",
+          "text": "Xong rồi ✅ App đang chạy ở localhost:3000"
+        },
+        {
+          "from": "user",
+          "name": "Bạn",
+          "text": "Giờ đưa lên mạng kiểu gì?"
+        },
+        {
+          "from": "ai",
+          "name": "AI",
+          "text": "Bạn cần server, tên miền, SSL, cấu hình…"
+        }
+      ],
+      "stamp": {
+        "text": "😵 RỐI!",
+        "line": 3,
+        "x": 620,
+        "y": 1010
+      },
+      "host": {
+        "pose": "think",
+        "slot": "bl"
+      },
+      "lines": [
+        {
+          "say": "Nhờ AI viết app thì nhanh lắm.",
+          "cap": "Nhờ AI viết app thì *nhanh lắm*"
+        },
+        {
+          "say": "Nhưng tới bước đưa lên mạng thì kẹt.",
+          "cap": "Nhưng đưa lên mạng thì *kẹt*"
+        },
+        {
+          "say": "Nào server, tên miền, chứng chỉ SSL.",
+          "cap": "Nào *server,* tên miền, SSL…"
+        },
+        {
+          "say": "Rối hết cả lên!",
+          "cap": "*Rối* hết cả lên!"
+        }
+      ]
+    },
+    {
+      "type": "headline",
+      "kicker": "✅ GIẢI PHÁP",
+      "logos": [
+        "zocloud"
+      ],
+      "text": "ZoCloud: deploy app\n*chỉ 1 lệnh*",
+      "sub": "Nền tảng cloud của *Nhân Hòa* · máy chủ tại Việt Nam",
+      "host": {
+        "pose": "present",
+        "slot": "br",
+        "flip": true
+      },
+      "lines": [
+        {
+          "say": "Giải pháp là ZoCloud, nền tảng cloud của Nhân Hòa.",
+          "cap": "*ZoCloud,* nền tảng cloud của Nhân Hòa"
+        },
+        {
+          "say": "Máy chủ đặt tại Việt Nam, thanh toán bằng tiền Việt.",
+          "cap": "Máy chủ tại *Việt Nam,* trả bằng VND"
+        }
+      ]
+    },
+    {
+      "type": "terminal",
+      "title": "Chỉ *2 bước*",
+      "num": "⌘",
+      "window": "cafe-pho-co — zsh",
+      "prompt": "~/cafe-pho-co $",
+      "steps": [
+        {
+          "cmd": "curl -fsSL https://app.zocloud.io/install.sh | sh",
+          "line": 0,
+          "out": [
+            "[BẢN NHÁP] output thật sẽ thay khi chạy deploy"
+          ]
+        },
+        {
+          "cmd": "zo deploy -to myorg/cafe/web",
+          "line": 1,
+          "outLine": 2,
+          "outDur": 3,
+          "out": [
+            "[BẢN NHÁP] log build thật",
+            "[BẢN NHÁP] …",
+            "[BẢN NHÁP] https://web-cafe.zocloud.app"
+          ]
+        }
+      ],
+      "lines": [
+        {
+          "say": "Bước một: cài zo CLI bằng một dòng lệnh.",
+          "cap": "Bước 1: cài *zo CLI*"
+        },
+        {
+          "say": "Bước hai: gõ zo deploy.",
+          "cap": "Bước 2: gõ *zo deploy*"
+        },
+        {
+          "say": "Nó tự nhận ra Node.js, tự build, rồi trả về link HTTPS.",
+          "cap": "Tự build, trả về *link HTTPS*"
+        }
+      ]
+    },
+    {
+      "type": "screen",
+      "frame": "phone",
+      "src": "media/live.mp4",
+      "callouts": [
+        {
+          "line": 1,
+          "text": "🔒 HTTPS · online",
+          "x": 560,
+          "y": 150,
+          "color": "var(--green)"
+        }
+      ],
+      "lines": [
+        {
+          "say": "Mở link trên điện thoại, app đã online!",
+          "cap": "Mở link: app đã *online!*"
+        },
+        {
+          "say": "Có HTTPS, ai cũng vào được ngay.",
+          "cap": "Có *HTTPS,* ai cũng vào được"
+        }
+      ]
+    },
+    {
+      "type": "flow",
+      "title": "Lười gõ lệnh? Để *AI tự deploy*",
+      "nodes": [
+        {
+          "logo": "claude",
+          "label": "Claude Code / Cursor",
+          "sub": "bạn: “deploy lên ZoCloud”"
+        },
+        {
+          "logo": "zocloud",
+          "label": "zo MCP",
+          "sub": "deploy_folder · logs · database"
+        },
+        {
+          "icon": "rocket",
+          "label": "Link HTTPS",
+          "sub": "…zocloud.app"
+        }
+      ],
+      "lines": [
+        {
+          "say": "Lười gõ lệnh? Kết nối zo MCP với Claude Code hoặc Cursor.",
+          "cap": "Kết nối *zo MCP* với Claude Code"
+        },
+        {
+          "say": "Bạn chỉ cần nói: deploy lên ZoCloud.",
+          "cap": "Chỉ cần nói: *deploy lên ZoCloud*"
+        },
+        {
+          "say": "AI tự đưa app lên và trả link cho bạn.",
+          "cap": "AI tự deploy, *trả link*"
+        }
+      ]
+    },
+    {
+      "type": "list",
+      "title": "ZoCloud có gì?",
+      "num": "★",
+      "items": [
+        {
+          "icon": "money",
+          "color": "var(--green)",
+          "title": "Gói miễn phí 500MB",
+          "sub": "Thử ngay, không mất tiền"
+        },
+        {
+          "icon": "code",
+          "title": "Node.js, Next.js, Python, PHP",
+          "sub": "Có cả *PostgreSQL, MySQL, Redis*"
+        },
+        {
+          "icon": "home",
+          "color": "var(--orange)",
+          "title": "Máy chủ tại Việt Nam",
+          "sub": "Trả bằng VND, có *hoá đơn VAT*"
+        }
+      ],
+      "lines": [
+        {
+          "say": "Vậy ZoCloud có gì?",
+          "cap": "Vậy *ZoCloud* có gì?"
+        },
+        {
+          "say": "Có gói miễn phí năm trăm MB để thử.",
+          "cap": "Gói *miễn phí* 500MB để thử"
+        },
+        {
+          "say": "Chạy Node.js, Next.js, Python, PHP, có cả database.",
+          "cap": "Node.js, Next.js, Python, *PHP*"
+        },
+        {
+          "say": "Máy chủ tại Việt Nam, có hoá đơn VAT.",
+          "cap": "Máy chủ VN, có *hoá đơn VAT*"
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "question": "Bạn đã vibe code app gì rồi?",
+      "host": {
+        "pose": "wave",
+        "slot": "top",
+        "act": "wave"
+      },
+      "lines": [
+        {
+          "say": "Lưu video lại, thử ngay tại ZoCloud chấm I O.",
+          "cap": "Thử ngay tại *zocloud.io*"
+        },
+        {
+          "say": "Theo dõi AI Today chấm V N để học AI mỗi ngày.",
+          "cap": "Theo dõi *aitoday.vn* mỗi ngày"
+        },
+        {
+          "say": "Bạn đã vibe code app gì? Comment cho mình biết nhé!",
+          "cap": "Bạn vibe code app gì? *Comment* nhé!"
+        }
+      ]
+    }
+  ]
+}

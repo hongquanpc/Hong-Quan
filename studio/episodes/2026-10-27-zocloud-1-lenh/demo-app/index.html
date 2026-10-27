@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cà Phê Phố Cổ</title>
+<style>
+  :root{--bg:#fbf6ef;--ink:#2b1d14;--brown:#7a4a2a;--cream:#f1e2cf;--accent:#d9822b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+  header{padding:56px 24px 40px;text-align:center;background:linear-gradient(160deg,#3b2416,#7a4a2a);color:#fff}
+  .logo{font-size:56px}
+  h1{font-size:40px;letter-spacing:-1px;margin-top:8px}
+  header p{opacity:.85;margin-top:10px;font-size:18px}
+  .btn{display:inline-block;margin-top:22px;padding:14px 28px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
+  main{max-width:720px;margin:0 auto;padding:28px 20px 48px}
+  h2{font-size:24px;margin:22px 0 14px}
+  .menu{display:grid;gap:12px}
+  .item{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:18px;padding:16px 18px;box-shadow:0 6px 18px rgba(60,30,10,.08)}
+  .item b{font-size:18px}.item span{color:#8a6a55;font-size:14px;display:block;margin-top:4px}
+  .price{font-weight:800;color:var(--brown);font-size:18px}
+  .info{background:var(--cream);border-radius:18px;padding:18px;line-height:1.7}
+  footer{text-align:center;color:#8a6a55;font-size:13px;padding:24px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">☕</div>
+  <h1>Cà Phê Phố Cổ</h1>
+  <p>Cà phê phin truyền thống giữa lòng Hà Nội</p>
+  <a class="btn" href="#menu">Xem menu</a>
+</header>
+<main>
+  <h2 id="menu">Menu hôm nay</h2>
+  <div class="menu">
+    <div class="item"><div><b>Cà phê trứng</b><span>Kem trứng đánh bông, cà phê phin đậm</span></div><div class="price">45k</div></div>
+    <div class="item"><div><b>Bạc xỉu</b><span>Sữa nhiều, cà phê vừa</span></div><div class="price">35k</div></div>
+    <div class="item"><div><b>Cà phê muối</b><span>Lớp kem muối béo mặn</span></div><div class="price">40k</div></div>
+    <div class="item"><div><b>Trà sen vàng</b><span>Trà sen Tây Hồ, uống nóng hoặc đá</span></div><div class="price">39k</div></div>
+  </div>
+  <h2>Ghé quán</h2>
+  <div class="info">📍 Phố cổ Hà Nội · 🕗 7:00 – 22:00</div>
+</main>
+<footer>Trang demo, viết bằng AI và deploy lên ZoCloud</footer>
+</body>
+</html>
