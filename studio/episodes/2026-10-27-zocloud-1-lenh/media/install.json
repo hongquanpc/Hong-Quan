@@ -1,0 +1,16 @@
+[
+ {
+  "cmd": "curl -fsSL https://app.zocloud.io/install.sh | sh",
+  "code": 0,
+  "out": [
+   {
+    "t": 6.49,
+    "text": "zo installed in /usr/local/bin/zo"
+   },
+   {
+    "t": 6.5,
+    "text": "zo 8d5b34f"
+   }
+  ]
+ }
+]
